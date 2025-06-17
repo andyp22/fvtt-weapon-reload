@@ -1,0 +1,21 @@
+<div class='dnd5e2 chat-card reload-ammo-list-card'>
+    <section class='card-header description collapsible'>
+        <header class='summary'>
+            <img class='gold-icon' src='{{item.img}}' alt='{{item.name}}' />
+            <div class='name-stacked border'>
+                <span class='title'>{{title}}</span>
+            </div>
+            <i class='fa-solid fa-chevron-down fa-fw' inert></i>
+        </header>
+        <section class='details collapsible-content card-content'>
+            <div class='wrapper'>
+                <p class='title'><em>{{flavor}}</em></p>
+                <ul class='ammo-list'>
+                    {{#each loadout}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+        </section>
+    </section>
+</div>

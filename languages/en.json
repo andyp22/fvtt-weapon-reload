@@ -1,0 +1,51 @@
+{
+    "WEAPON_RELOAD": {
+        "Title": "Weapon Reload",
+        "Empty": "Empty",
+        "ItemFeature": "Item Feature",
+        "Concealable": "Concealable",
+        "Unstable": "Unstable",
+        "Features": {
+            "FirearmAttack": {
+                "DryFireDescription": "Woah there, {name}! You're dry firing your {firearm}!",
+                "DryFireTitle": "Dryfire!",
+                "MisfireNatOne": "This round may misfire when fired; a roll of 1 is treated as a critical failure.",
+                "MisfireUnstable": "<strong>Unstable:</strong> This round may misfire when fired; a roll of 1 <em>or</em> 2 is treated as a critical failure.",
+                "Refund": {
+                    "RefundCompleteMsg": "A {bullet} has been refunded for your {name}.",
+                    "RefundCompleteTitle": "Ammunition Refund",
+                    "RefundNoMoreMsg": "{name}, your {firearm} is full and has no more ammunition that can be refunded."
+                }
+            },
+            "Reload": {
+                "Text": "Reload",
+                "Weapon": {
+                    "LoadingErrorMsg": "Trying to load too many {name}",
+                    "WeaponReloadedChatFlavor": "Quick hands and steady work. You've loaded:",
+                    "WeaponReloadedChatMsg": "{firearm} reloaded"
+                },
+                "Ammunition": {
+                    "ChoiceDialogButtonTxtCancel": "Cancel",
+                    "ChoiceDialogButtonTxtLoad": "Load 'em up!",
+                    "ChoiceDialogTitle": "Firearm Loadout"
+                }
+            }
+        }
+    },
+    "SETTINGS": {
+        "WEAPON_RELOAD": {
+            "FilterAmmunitionByEquipped": {
+                "Name": "Filter Ammunition By Equipped",
+                "Hint": "A flag to indicate whether filtering of ammunition should include checking to see if it is also equipped."
+            },
+            "UseMisfires": {
+                "Name": "Enable Misfires",
+                "Hint": "A flag to indicate whether the optional rule for using misfiring firearms is enabled."
+            },
+            "UnstableAmmo": {
+                "Name": "Use Unstable (U) Ammunition",
+                "Hint": "A flag to indicate whether the optional rule for using unstable ammunition is enabled."
+            }
+        }
+    }
+}

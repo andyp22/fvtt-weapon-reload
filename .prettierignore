@@ -1,0 +1,18 @@
+.cache
+node_modules
+public
+static
+.github
+*.min.*
+*.d.ts
+package-lock.json
+
+# Foundry
+package/packs
+
+# VSCode Extensions
+.vscode
+.history
+
+# Project
+package/lib

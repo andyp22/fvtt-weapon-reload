@@ -1,0 +1,14 @@
+<div id="ammoSelectionDialogTemplate">
+        <ol>
+            {{#each loadoutSlots}}
+            <li>
+                <select name="ammo-select" class="ammo-select">
+                    <option value="Empty">Empty</option>
+                    {{#each ../ammoOptions}}
+                    <option value="{{value}}">{{name}} ({{count}})</option>
+                    {{/each}}
+                </select>
+            </li>
+            {{/each}}
+        </ol>
+</div>
