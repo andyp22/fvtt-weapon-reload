@@ -54,7 +54,7 @@ export default class ModuleManager {
             isPhysical: true,
         };
 
-        (CONFIG as any).DND5E.weaponIds.firearm =
+        (CONFIG as any).DND5E.weaponIds.reloadableWeapon =
             'Compendium.fvtt-weapon-reload.item-pack.Item.lE60QaS1sctb3OAd';
     }
 

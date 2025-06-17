@@ -1,7 +1,7 @@
 import ModuleManager from './ModuleManager';
 import {
-    FirearmAttackFeature,
-    FirearmCreationFeature,
+    ReloadableWeaponAttackFeature,
+    ReloadableWeaponCreationFeature,
     ReloadFeature,
 } from '../features';
 
@@ -17,8 +17,8 @@ export default class FeatureManager {
     init() {
         this._features = {
             reload: new ReloadFeature(this),
-            firearmAttack: new FirearmAttackFeature(this),
-            firearmCreation: new FirearmCreationFeature(this),
+            reloadableWeaponAttack: new ReloadableWeaponAttackFeature(this),
+            reloadableWeaponCreation: new ReloadableWeaponCreationFeature(this),
         };
     }
 

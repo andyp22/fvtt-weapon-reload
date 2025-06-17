@@ -13,7 +13,7 @@ export class ReloadFeature extends BaseFeature {
 
     async onUseActivity(activity: any) {
         if (activity.type === 'utility' && activity.name == 'Reload') {
-            console.log('Weapon Reload | Triggered Reload: ', activity);
+            console.log('Weapon Reload | Triggered Reload');
 
             this.characterId = activity.actor.id;
             this.weaponId = activity.item.id;
@@ -65,11 +65,11 @@ export class ReloadFeature extends BaseFeature {
         const dialogContent = await (
             foundry.applications as any
         ).handlebars.renderTemplate(
-            'modules/foundry-vtt-eberron-west-module/templates/ammoSelectionDialogTemplate.hbs',
+            'modules/fvtt-weapon-reload/templates/ammoSelectionDialogTemplate.hbs',
             {
                 loadoutSlots: new Array(
                     parseInt(this.weapon.system.uses.max)
-                ).fill(this.EMPTY),
+                ).fill('Empty'),
                 ammoOptions: availableAmmunition.map((ammoType: DndItem5e) => {
                     return {
                         name: ammoType.name,
@@ -116,52 +116,55 @@ export class ReloadFeature extends BaseFeature {
                     ),
                     content: dialogContent,
                     buttons: dialogButtons,
-                    onSubmit: this.reloadFirearm.bind(this),
+                    onSubmit: this.reloadReloadableWeapon.bind(this),
                 },
                 'ammo-choice-dialog'
             )
             .render({ force: true });
     }
 
-    async reloadFirearm(loadout: string[]) {
-        const firearm = this.weapon;
+    async reloadReloadableWeapon(loadout: string[]) {
+        const reloadableWeapon = this.weapon;
         const ammoCounts = this.getLoadoutCounts(loadout);
 
         if (this.removeLoadout(ammoCounts)) {
-            // Update the firearm uses
+            // Update the reloadableWeapon uses
             let qty = 0;
-            if (ammoCounts[this.EMPTY] > 0) {
+            if (ammoCounts['Empty'] > 0) {
                 // Adjust spent uses by the number of Empty slots
-                qty += ammoCounts[this.EMPTY];
+                qty += ammoCounts['Empty'];
             }
-            await firearm.update({
+            await reloadableWeapon.update({
                 'system.uses.spent': qty,
-                'system.uses.value': parseInt(firearm.system.uses.max) - qty,
+                'system.uses.value':
+                    parseInt(reloadableWeapon.system.uses.max) - qty,
             });
-            await firearm.setFlag(this.moduleManager.id, 'chambered', loadout);
-            await firearm.setFlag(
+            await reloadableWeapon.setFlag(
+                this.moduleManager.id,
+                'chambered',
+                loadout
+            );
+            await reloadableWeapon.setFlag(
                 this.moduleManager.id,
                 'fired',
-                new Array(parseInt(this.weapon.system.uses.max)).fill(
-                    this.EMPTY
-                )
+                new Array(parseInt(this.weapon.system.uses.max)).fill('Empty')
             );
 
             const htmlTemplate = await (
                 foundry.applications as any
             ).handlebars.renderTemplate(
-                'modules/foundry-vtt-eberron-west-module/templates/firearmReloadTemplate.hbs',
+                'modules/fvtt-weapon-reload/templates/reloadableWeaponReloadTemplate.hbs',
                 {
                     item: {
-                        img: firearm.img,
-                        name: firearm.name,
+                        img: reloadableWeapon.img,
+                        name: reloadableWeapon.name,
                     },
                     flavor: this.translate(
                         'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatFlavor'
                     ),
                     title: this.translate(
                         'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatMsg',
-                        { firearm: firearm.name },
+                        { reloadableWeapon: reloadableWeapon.name },
                         true
                     ),
                     loadout: loadout,
@@ -228,6 +231,7 @@ export class ReloadFeature extends BaseFeature {
             if (!loadout[ammo]) loadout[ammo] = 0;
             loadout[ammo] = loadout[ammo] + 1;
         });
+        console.log('getLoadoutCounts: ', currentLoadout, loadout);
         return loadout;
     }
 

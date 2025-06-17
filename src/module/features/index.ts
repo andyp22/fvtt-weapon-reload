@@ -1,3 +1,3 @@
-export { FirearmAttackFeature } from './FirearmAttackFeature';
-export { FirearmCreationFeature } from './FirearmCreationFeature';
+export { ReloadableWeaponAttackFeature } from './ReloadableWeaponAttackFeature';
+export { ReloadableWeaponCreationFeature } from './ReloadableWeaponCreationFeature';
 export { ReloadFeature } from './ReloadFeature';

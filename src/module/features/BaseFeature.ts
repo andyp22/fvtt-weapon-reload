@@ -6,13 +6,11 @@ export default class BaseFeature {
     private _featureManager: FeatureManager;
     private _actorId: string;
     private _weaponId: string;
-    protected EMPTY: string;
 
     constructor(featureManager: FeatureManager) {
         this._featureManager = featureManager;
         this._actorId = '';
         this._weaponId = '';
-        this.EMPTY = this.translate('WEAPON_RELOAD.Empty');
         this.init();
     }
 
@@ -49,16 +47,18 @@ export default class BaseFeature {
     }
 
     get loadout() {
-        const firearm = this.weapon;
-        const maxShots = parseInt(firearm.system.uses.max);
+        const reloadableWeapon = this.weapon;
+        const maxShots = parseInt(reloadableWeapon.system.uses.max);
         const currentLoadout =
-            (firearm.getFlag(this.moduleManager.id, 'chambered') as string[]) ||
-            new Array(maxShots).fill(this.EMPTY);
+            (reloadableWeapon.getFlag(
+                this.moduleManager.id,
+                'chambered'
+            ) as string[]) || new Array(maxShots).fill('Empty');
 
         if (currentLoadout.length < maxShots) {
             const missing = maxShots - currentLoadout.length;
             for (let i = 0; i < missing; i++) {
-                currentLoadout.push(this.EMPTY);
+                currentLoadout.push('Empty');
             }
         }
 
@@ -66,16 +66,18 @@ export default class BaseFeature {
     }
 
     get fired() {
-        const firearm = this.weapon;
-        const maxShots = parseInt(firearm.system.uses.max);
+        const reloadableWeapon = this.weapon;
+        const maxShots = parseInt(reloadableWeapon.system.uses.max);
         const fired =
-            (firearm.getFlag(this.moduleManager.id, 'fired') as string[]) ||
-            new Array(maxShots).fill(this.EMPTY);
+            (reloadableWeapon.getFlag(
+                this.moduleManager.id,
+                'fired'
+            ) as string[]) || new Array(maxShots).fill('Empty');
 
         if (fired.length < maxShots) {
             const missing = maxShots - fired.length;
             for (let i = 0; i < missing; i++) {
-                fired.push(this.EMPTY);
+                fired.push('Empty');
             }
         }
 

@@ -10,7 +10,7 @@ import {
 import { ActivityCardChatType } from '../types/chat.types';
 import BaseFeature from './BaseFeature';
 
-export class FirearmAttackFeature extends BaseFeature {
+export class ReloadableWeaponAttackFeature extends BaseFeature {
     private _nextRound: {
         id: string;
         type: string;
@@ -30,19 +30,19 @@ export class FirearmAttackFeature extends BaseFeature {
     async onUseActivity(d20Roll: DndD20Roll[], event: DndAttackEvent) {
         const roll = d20Roll[0];
         const weaponData = roll?.data?.item;
-        if (weaponData?.type?.baseItem !== 'firearm') return;
+        if (weaponData?.type?.baseItem !== 'reloadableWeapon') return;
 
-        console.log('Weapon Reload | Triggered Firearm Attack');
+        console.log('Weapon Reload | Triggered Attack');
         this.weaponId = event.subject.item.id;
         this.characterId = event.subject.actor.id;
 
-        return await this.firearmAttack();
+        return await this.reloadableWeaponAttack();
     }
 
-    async firearmAttack() {
-        const bullet = await this.getNextBullet();
+    async reloadableWeaponAttack() {
+        const bullet = await this.getNextRound();
 
-        if (bullet.name == this.EMPTY) {
+        if (bullet.name == 'Empty') {
             await this.dryfireWeapon();
 
             // Stop the attack if Dryfiring the weapon
@@ -59,7 +59,7 @@ export class FirearmAttackFeature extends BaseFeature {
             this.onRenderChatMessage.bind(this)
         );
 
-        return await this.fireBullet(bullet);
+        return await this.fireRound(bullet);
     }
 
     async onRenderChatMessage(message, html) {
@@ -89,10 +89,10 @@ export class FirearmAttackFeature extends BaseFeature {
                     return prop === 'unstable';
                 })
                     ? this.translate(
-                          'WEAPON_RELOAD.Features.FirearmAttack.MisfireUnstable'
+                          'WEAPON_RELOAD.Features.ReloadableWeaponAttack.MisfireUnstable'
                       )
                     : this.translate(
-                          'WEAPON_RELOAD.Features.FirearmAttack.MisfireNatOne'
+                          'WEAPON_RELOAD.Features.ReloadableWeaponAttack.MisfireNatOne'
                       );
 
             const cardContentElement =
@@ -118,28 +118,28 @@ export class FirearmAttackFeature extends BaseFeature {
             const misfireBtn = document.createElement('button');
             misfireBtn.onclick = this.onClickMisfire.bind(this);
             misfireBtn.innerHTML = `${this.makeIcon('fa-burst')}${this.translate(
-                'EBERRON_WEST.features.firearmAttack.misfiredBtnTxt'
+                'WEAPON_RELOAD.Features.ReloadableWeaponAttack.MisfiredBtnTxt'
             )}`;
             cardButtonsElement.append(misfireBtn);
 
             const refundBtn = document.createElement('button');
             refundBtn.onclick = this.onClickRefund.bind(this);
             refundBtn.innerHTML = `${this.makeIcon('fa-undo')}${this.translate(
-                'EBERRON_WEST.features.firearmAttack.refundBtnTxt'
+                'WEAPON_RELOAD.Features.ReloadableWeaponAttack.RefundBtnTxt'
             )}`;
             cardButtonsElement.append(refundBtn);
         }
     }
 
-    async getNextBullet(): Promise<DndItem5e> {
+    async getNextRound(): Promise<DndItem5e> {
         const character = this.character;
         const weapon = this.weapon;
 
         const loadout = this.loadout;
-        loadout.push(this.EMPTY);
-        const nextBullet = loadout.shift();
+        loadout.push('Empty');
+        const nextRound = loadout.shift();
 
-        // Remove the bullet from the firearm ammunition
+        // Remove the bullet from the reloadableWeapon ammunition
         await weapon.setFlag(this.moduleManager.id, 'chambered', loadout);
 
         const inventoryAmmunition = this.ammunition(
@@ -148,11 +148,11 @@ export class FirearmAttackFeature extends BaseFeature {
         return (
             inventoryAmmunition.find((ammo: DndItem5e) => {
                 const name = ammo.name;
-                if (name == nextBullet) {
+                if (name == nextRound) {
                     return ammo;
                 }
                 return null;
-            }) || ({ name: this.EMPTY } as DndItem5e)
+            }) || ({ name: 'Empty' } as DndItem5e)
         );
     }
 
@@ -177,15 +177,15 @@ export class FirearmAttackFeature extends BaseFeature {
         const templateData: ActivityCardChatType = {
             description: {
                 chat: `<p>${this.translate(
-                    'WEAPON_RELOAD.Features.FirearmAttack.DryFireDescription',
-                    { name: character.name, firearm: weapon.name },
+                    'WEAPON_RELOAD.Features.ReloadableWeaponAttack.DryFireDescription',
+                    { name: character.name, reloadableWeapon: weapon.name },
                     true
                 )}</p>`,
             },
             item: {
                 img: weapon.img,
                 name: this.translate(
-                    'WEAPON_RELOAD.Features.FirearmAttack.DryFireTitle'
+                    'WEAPON_RELOAD.Features.ReloadableWeaponAttack.DryFireTitle'
                 ),
             },
             subtitle: weapon.name,
@@ -204,30 +204,36 @@ export class FirearmAttackFeature extends BaseFeature {
         const htmlTemplate = await (
             foundry.applications as any
         ).handlebars.renderTemplate(
-            'modules/foundry-vtt-eberron-west-module/templates/overrides/activity-card.hbs',
+            'modules/fvtt-weapon-reload/templates/overrides/activity-card.hbs',
             templateData
         );
         this.moduleManager.uiManager.sendChat(character, htmlTemplate);
     }
 
-    async fireBullet(bullet: DndItem5e) {
-        const firearm = this.weapon;
-        const maxShots = parseInt(firearm.system.uses.max);
+    async fireRound(bullet: DndItem5e) {
+        const reloadableWeapon = this.weapon;
+        const maxShots = parseInt(reloadableWeapon.system.uses.max);
         const firedLoadout =
-            (firearm.getFlag(this.moduleManager.id, 'fired') as string[]) ||
-            new Array(maxShots).fill(this.EMPTY);
+            (reloadableWeapon.getFlag(
+                this.moduleManager.id,
+                'fired'
+            ) as string[]) || new Array(maxShots).fill('Empty');
 
         firedLoadout.unshift(bullet.name);
         firedLoadout.splice(-1);
-        await firearm.setFlag(this.moduleManager.id, 'fired', firedLoadout);
+        await reloadableWeapon.setFlag(
+            this.moduleManager.id,
+            'fired',
+            firedLoadout
+        );
 
-        const uses = firearm.system.uses;
+        const uses = reloadableWeapon.system.uses;
         const qty: number =
             uses.spent + 1 <= parseInt(uses.max)
                 ? uses.spent + 1
                 : parseInt(uses.max);
 
-        await firearm.update({
+        await reloadableWeapon.update({
             'system.uses.spent': qty,
             'system.uses.value': parseInt(uses.max) - qty,
         });
@@ -235,27 +241,30 @@ export class FirearmAttackFeature extends BaseFeature {
         return bullet.use();
     }
 
-    reload(actor: DndActor5e, firearm: DndItem5e) {
+    reload(actor: DndActor5e, reloadableWeapon: DndItem5e) {
         this.featureManager
             .getFeature('reload')
-            .onReloadCallback(actor, firearm);
+            .onReloadCallback(actor, reloadableWeapon);
     }
 
     async onClickRefund() {
         const actor = this.character;
-        const firearm = this.weapon;
+        const reloadableWeapon = this.weapon;
         const inventoryAmmunition = this.ammunition(actor.items);
 
         const fired = this.fired;
         const refund: string = fired.splice(0, 1)[0] as string;
-        fired.push(this.EMPTY);
+        fired.push('Empty');
 
-        if (refund == this.EMPTY) {
+        if (refund == 'Empty') {
             // Notify the user that there is no ammunition to refund
             this.moduleManager.uiManager.uiNotification(
                 this.translate(
-                    'WEAPON_RELOAD.Features.FirearmAttack.Refund.RefundNoMoreMsg',
-                    { name: actor.name, firearm: firearm.name },
+                    'WEAPON_RELOAD.Features.ReloadableWeaponAttack.Refund.RefundNoMoreMsg',
+                    {
+                        name: actor.name,
+                        reloadableWeapon: reloadableWeapon.name,
+                    },
                     true
                 ),
                 'warn'
@@ -263,7 +272,7 @@ export class FirearmAttackFeature extends BaseFeature {
             return;
         }
 
-        await firearm.setFlag(this.moduleManager.id, 'fired', fired);
+        await reloadableWeapon.setFlag(this.moduleManager.id, 'fired', fired);
 
         let bullet = { name: refund } as DndItem5e;
         inventoryAmmunition.forEach((ammo: Item5e) => {
@@ -277,12 +286,16 @@ export class FirearmAttackFeature extends BaseFeature {
         const ammoLoadout = this.loadout;
         ammoLoadout.unshift(refund);
         ammoLoadout.splice(-1);
-        await firearm.setFlag(this.moduleManager.id, 'chambered', ammoLoadout);
+        await reloadableWeapon.setFlag(
+            this.moduleManager.id,
+            'chambered',
+            ammoLoadout
+        );
 
-        // Update the firearm uses
-        const uses = firearm.system.uses;
+        // Update the reloadableWeapon uses
+        const uses = reloadableWeapon.system.uses;
         const qty: number = uses.spent - 1 >= 0 ? uses.spent - 1 : 0;
-        firearm.update({
+        reloadableWeapon.update({
             'system.uses.spent': qty,
             'system.uses.value': parseInt(uses.max) - qty,
         });
@@ -291,19 +304,19 @@ export class FirearmAttackFeature extends BaseFeature {
         const htmlTemplate = await (
             foundry.applications as any
         ).handlebars.renderTemplate(
-            'modules/foundry-vtt-eberron-west-module/templates/ammoRefundNoticeTemplate.hbs',
+            'modules/fvtt-weapon-reload/templates/ammoRefundNoticeTemplate.hbs',
             {
                 item: {
                     img: bullet.img,
                     name: bullet.name,
                 },
                 description: this.translate(
-                    'WEAPON_RELOAD.Features.FirearmAttack.Refund.RefundCompleteMsg',
-                    { bullet: refund, name: firearm.name },
+                    'WEAPON_RELOAD.Features.ReloadableWeaponAttack.Refund.RefundCompleteMsg',
+                    { bullet: refund, name: reloadableWeapon.name },
                     true
                 ),
                 title: this.translate(
-                    'WEAPON_RELOAD.Features.FirearmAttack.Refund.RefundCompleteTitle'
+                    'WEAPON_RELOAD.Features.ReloadableWeaponAttack.Refund.RefundCompleteTitle'
                 ),
             }
         );
@@ -325,6 +338,6 @@ export class FirearmAttackFeature extends BaseFeature {
     }
 
     toString() {
-        return 'class FirearmAttackFeature';
+        return 'class ReloadableWeaponAttackFeature';
     }
 }
