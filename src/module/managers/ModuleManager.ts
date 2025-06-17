@@ -70,6 +70,15 @@ export default class ModuleManager {
             default: true,
         });
 
+        game.settings.register(moduleName, 'unstableAmmoFailureThreshhold', {
+            scope: 'world',
+            name: 'SETTINGS.WEAPON_RELOAD.UnstableAmmoFailureThreshold.Name',
+            hint: 'SETTINGS.WEAPON_RELOAD.UnstableAmmoFailureThreshold.Hint',
+            type: Number,
+            config: true,
+            default: 2,
+        });
+
         game.settings.register(moduleName, 'useMisfires', {
             scope: 'world',
             name: 'SETTINGS.WEAPON_RELOAD.UseMisfires.Name',

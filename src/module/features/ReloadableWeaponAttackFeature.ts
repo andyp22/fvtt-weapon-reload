@@ -72,38 +72,55 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
             Hooks.off('dnd5e.renderChatMessage', this._hookId);
             this._nextRound = { id: '', type: '' };
 
+            const bullet = this.character.items.get(itemId) as DndItem5e;
+
             const activationCard = html.querySelector('.activation-card');
             const itemcard = html.querySelector('.item-card');
             const parentElement = activationCard || itemcard;
 
-            // Unstable ammo message
+            // Grab module configurations
             const checkUnstableAmmo = game.settings.get(
                 this.moduleManager.id,
                 'unstableAmmo'
             ) as boolean;
 
-            const bullet = this.character.items.get(itemId) as DndItem5e;
-            const criticalFailureMsg =
-                checkUnstableAmmo &&
-                bullet?.system.properties.find((prop: string) => {
-                    return prop === 'unstable';
-                })
-                    ? this.translate(
-                          'WEAPON_RELOAD.Features.ReloadableWeaponAttack.MisfireUnstable'
-                      )
-                    : this.translate(
-                          'WEAPON_RELOAD.Features.ReloadableWeaponAttack.MisfireNatOne'
-                      );
+            const checkMisfire = game.settings.get(
+                this.moduleManager.id,
+                'useMisfires'
+            ) as boolean;
 
-            const cardContentElement =
-                parentElement.querySelector('.card-content');
-            const wrapperElement = cardContentElement.querySelector('.wrapper');
-            wrapperElement.insertAdjacentHTML(
-                'beforeend',
-                `<p>${criticalFailureMsg}</p>`
-            );
+            const unstableAmmoFailureThreshold = game.settings.get(
+                this.moduleManager.id,
+                'unstableAmmoFailureThreshhold'
+            ) as number;
 
-            // Add Misfire and ammo refund buttons
+            // Add the misfire message
+            if (checkMisfire) {
+                const criticalFailureMsg =
+                    checkUnstableAmmo &&
+                    bullet?.system.properties.find((prop: string) => {
+                        return prop === 'unstable';
+                    })
+                        ? this.translate(
+                              'WEAPON_RELOAD.Features.ReloadableWeaponAttack.MisfireUnstable',
+                              { failure: `${unstableAmmoFailureThreshold}` },
+                              true
+                          )
+                        : this.translate(
+                              'WEAPON_RELOAD.Features.ReloadableWeaponAttack.MisfireNatOne'
+                          );
+
+                const cardContentElement =
+                    parentElement.querySelector('.card-content');
+                const wrapperElement =
+                    cardContentElement.querySelector('.wrapper');
+                wrapperElement.insertAdjacentHTML(
+                    'beforeend',
+                    `<p>${criticalFailureMsg}</p>`
+                );
+            }
+
+            // Add card button container if missing
             if (itemcard && !activationCard) {
                 const referenceElement =
                     parentElement.querySelector('.card-header');
@@ -115,13 +132,17 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
             const cardButtonsElement =
                 parentElement.querySelector('.card-buttons');
 
-            const misfireBtn = document.createElement('button');
-            misfireBtn.onclick = this.onClickMisfire.bind(this);
-            misfireBtn.innerHTML = `${this.makeIcon('fa-burst')}${this.translate(
-                'WEAPON_RELOAD.Features.ReloadableWeaponAttack.MisfiredBtnTxt'
-            )}`;
-            cardButtonsElement.append(misfireBtn);
+            // Add Misfire button
+            if (checkMisfire) {
+                const misfireBtn = document.createElement('button');
+                misfireBtn.onclick = this.onClickMisfire.bind(this);
+                misfireBtn.innerHTML = `${this.makeIcon('fa-burst')}${this.translate(
+                    'WEAPON_RELOAD.Features.ReloadableWeaponAttack.MisfiredBtnTxt'
+                )}`;
+                cardButtonsElement.append(misfireBtn);
+            }
 
+            // Add ammo refund button
             const refundBtn = document.createElement('button');
             refundBtn.onclick = this.onClickRefund.bind(this);
             refundBtn.innerHTML = `${this.makeIcon('fa-undo')}${this.translate(

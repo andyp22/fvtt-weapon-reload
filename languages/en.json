@@ -1,38 +1,39 @@
 {
     "WEAPON_RELOAD": {
-        "Title": "Weapon Reload",
-        "Empty": "Empty",
-        "ItemFeature": "Item Feature",
         "Concealable": "Concealable",
-        "MisfiredBtnTxt": "Misfire",
-        "RefundBtnTxt": "Refund",
-        "Unstable": "Unstable",
         "Features": {
-            "ReloadableWeaponAttack": {
-                "DryFireDescription": "Woah there, {name}! You're dry firing your {reloadableWeapon}!",
-                "DryFireTitle": "Dryfire!",
-                "MisfireNatOne": "This round may misfire when fired; a roll of 1 is treated as a critical failure.",
-                "MisfireUnstable": "<strong>Unstable:</strong> This round may misfire when fired; a roll of 1 <em>or</em> 2 is treated as a critical failure.",
-                "Refund": {
-                    "RefundCompleteMsg": "A {bullet} has been refunded for your {name}.",
-                    "RefundCompleteTitle": "Ammunition Refund",
-                    "RefundNoMoreMsg": "{name}, your {reloadableWeapon} is full and has no more ammunition that can be refunded."
-                }
-            },
             "Reload": {
+                "Ammunition": {
+                    "ChoiceDialogButtonTxtCancel": "Cancel",
+                    "ChoiceDialogButtonTxtLoad": "Load 'em up!",
+                    "ChoiceDialogTitle": "Weapon Loadout"
+                },
                 "Text": "Reload",
                 "Weapon": {
                     "LoadingErrorMsg": "Trying to load too many {name}",
                     "WeaponReloadedChatFlavor": "Quick hands and steady work. You've loaded:",
                     "WeaponReloadedChatMsg": "{reloadableWeapon} reloaded"
-                },
-                "Ammunition": {
-                    "ChoiceDialogButtonTxtCancel": "Cancel",
-                    "ChoiceDialogButtonTxtLoad": "Load 'em up!",
-                    "ChoiceDialogTitle": "Weapon Loadout"
                 }
+            },
+            "ReloadableWeaponAttack": {
+                "DryFireDescription": "Woah there, {name}! You're dry firing your {reloadableWeapon}!",
+                "DryFireTitle": "Dryfire!",
+                "MisfiredBtnTxt": "Misfire",
+                "MisfireNatOne": "<strong>Misfire:</strong> This round may misfire when fired; a roll of 1 is treated as a critical failure.",
+                "MisfireUnstable": "<strong>Unstable Misfire:</strong> This round may misfire when fired; a roll of {failure} <em>or lower</em> is treated as a critical failure.",
+                "Refund": {
+                    "RefundCompleteMsg": "A {bullet} has been refunded for your {name}.",
+                    "RefundCompleteTitle": "Ammunition Refund",
+                    "RefundNoMoreMsg": "{name}, your {reloadableWeapon} is full and has no more ammunition that can be refunded."
+                },
+                "RefundBtnTxt": "Refund"
             }
-        }
+        },
+        "ItemFeature": "Item Feature",
+        "MisfiredBtnTxt": "Misfire",
+        "RefundBtnTxt": "Refund",
+        "Title": "Weapon Reload",
+        "Unstable": "Unstable"
     },
     "SETTINGS": {
         "WEAPON_RELOAD": {
@@ -45,8 +46,12 @@
                 "Hint": "A flag to indicate whether the optional rule for using misfiring weapons is enabled."
             },
             "UnstableAmmo": {
-                "Name": "Use Unstable (U) Ammunition",
+                "Name": "Use Unstable Ammunition",
                 "Hint": "A flag to indicate whether the optional rule for using unstable ammunition is enabled."
+            },
+            "UnstableAmmoFailureThreshold": {
+                "Name": "Unstable Ammunition Failure Threshold",
+                "Hint": "When using unstable ammunition, a roll of this or lower results in critical failure."
             }
         }
     }
