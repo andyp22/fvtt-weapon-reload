@@ -18,7 +18,10 @@ export default class UiManager {
 
     buildDialog(options, id) {
         return new foundry.applications.api.DialogV2({
-            window: { title: options.title },
+            window: {
+                title: options.title,
+                contentClasses: options.contentClasses || [],
+            },
             content: options.content,
             buttons: options.buttons,
             submit: options.onSubmit,

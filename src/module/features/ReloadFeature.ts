@@ -1,17 +1,30 @@
+import DialogV2 from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client-esm/applications/api/dialog.mjs';
 import FeatureManager from '../managers/FeatureManager';
 import { DndActor5e, DndItem5e } from '../types/dnd.types';
 import BaseFeature from './BaseFeature';
 
+interface AmmoItemOption {
+    name: string;
+    value: string;
+    count: number;
+    equipped: boolean;
+}
+
 export class ReloadFeature extends BaseFeature {
+    private _hookId: number;
+    private _handleChoiceDialogClose: boolean;
+
     constructor(featureManager: FeatureManager) {
         super(featureManager);
+        this._hookId = -1;
+        this._handleChoiceDialogClose = false;
     }
 
     init() {
         Hooks.on('dnd5e.postUseActivity', this.onUseActivity.bind(this));
     }
 
-    async onUseActivity(activity: any) {
+    onUseActivity(activity: any) {
         if (activity.type === 'utility' && activity.name == 'Reload') {
             console.log('Weapon Reload | Triggered Reload');
 
@@ -21,45 +34,72 @@ export class ReloadFeature extends BaseFeature {
         }
     }
 
-    async weaponReload(refundAmmo: boolean = true) {
+    weaponReload(refundAmmo: boolean = true) {
         const items = this.character?.items;
+        const currentLoadout = this.loadout;
+        const inventoryAmmunition = this.ammunition(items) as DndItem5e[];
+        let ammunitionChoices: AmmoItemOption[] = [];
+
+        if (refundAmmo) {
+            ammunitionChoices = this.refundChamberedAmmo(inventoryAmmunition);
+        } else {
+            ammunitionChoices = inventoryAmmunition.map(
+                (ammo: DndItem5e): AmmoItemOption => {
+                    return {
+                        name: ammo.name,
+                        value: ammo.name,
+                        count: ammo.system.quantity,
+                        equipped: ammo.system.equipped,
+                    };
+                }
+            );
+        }
+
         const checkEquipped = game.settings.get(
             this.moduleManager.id,
             'filterAmmunitionByEquipped'
         ) as boolean;
-        const currentLoadout = this.loadout;
 
-        if (refundAmmo) {
-            this.refundChamberedAmmo(this.ammunition(items) as DndItem5e[]);
-        }
-
-        const ammo = this.ammunition(items, checkEquipped) as DndItem5e[];
-        const inventoryAmmunition: DndItem5e[] = [];
-
-        ammo.forEach((ammoItem: DndItem5e) => {
-            if (ammoItem.system.quantity > 0) {
-                inventoryAmmunition.push(ammoItem);
-            }
-        });
-
-        await this.chooseAmmunition(inventoryAmmunition, currentLoadout);
+        this.chooseAmmunition(
+            ammunitionChoices.filter((ammoItem: AmmoItemOption) => {
+                if (ammoItem.count > 0) {
+                    if (
+                        (checkEquipped && ammoItem.equipped) ||
+                        !checkEquipped
+                    ) {
+                        return true;
+                    }
+                }
+                return false;
+            }),
+            currentLoadout
+        );
     }
 
-    refundChamberedAmmo(availableAmmunition: DndItem5e[]) {
+    refundChamberedAmmo(inventoryAmmunition: DndItem5e[]): AmmoItemOption[] {
         const loadoutCounts = this.getLoadoutCounts(this.loadout);
-        availableAmmunition.forEach(async (ammo: DndItem5e) => {
+        const availableAmmunition: AmmoItemOption[] = [];
+        inventoryAmmunition.forEach((ammo: DndItem5e) => {
             const name = ammo.name;
+            const ammoInfo: AmmoItemOption = {
+                name: ammo.name,
+                value: ammo.name,
+                count: ammo.system.quantity,
+                equipped: ammo.system.equipped,
+            };
             if (loadoutCounts[name]) {
-                await ammo.update({
-                    'system.quantity':
-                        ammo.system.quantity + loadoutCounts[name],
+                ammoInfo.count = ammo.system.quantity + loadoutCounts[name];
+                ammo.update({
+                    'system.quantity': ammoInfo.count,
                 });
             }
+            availableAmmunition.push(ammoInfo);
         });
+        return availableAmmunition;
     }
 
     async chooseAmmunition(
-        availableAmmunition: DndItem5e[],
+        ammoOptions: AmmoItemOption[],
         currentLoadout: string[]
     ) {
         const dialogContent = await (
@@ -70,13 +110,7 @@ export class ReloadFeature extends BaseFeature {
                 loadoutSlots: new Array(
                     parseInt(this.weapon.system.uses.max)
                 ).fill('Empty'),
-                ammoOptions: availableAmmunition.map((ammoType: DndItem5e) => {
-                    return {
-                        name: ammoType.name,
-                        value: ammoType.name,
-                        count: ammoType.system.quantity,
-                    };
-                }),
+                ammoOptions,
             }
         );
 
@@ -87,6 +121,7 @@ export class ReloadFeature extends BaseFeature {
                     'WEAPON_RELOAD.Features.Reload.Ammunition.ChoiceDialogButtonTxtLoad'
                 ),
                 callback: (_event, button) => {
+                    this._handleChoiceDialogClose = false;
                     const loadout: string[] = [];
                     for (let i = 0; i < button.form.elements.length; i++) {
                         const elm = button.form.elements.item(i);
@@ -103,10 +138,18 @@ export class ReloadFeature extends BaseFeature {
                     'WEAPON_RELOAD.Features.Reload.Ammunition.ChoiceDialogButtonTxtCancel'
                 ),
                 callback: () => {
+                    this._handleChoiceDialogClose = false;
                     return currentLoadout;
                 },
             },
         ];
+
+        this._handleChoiceDialogClose = true;
+        this._hookId = Hooks.on('closeDialogV2', (dialogV2: DialogV2) => {
+            if (dialogV2.id === 'ammo-choice-dialog') {
+                this.onCloseChoiceDialog(currentLoadout);
+            }
+        });
 
         this.moduleManager.uiManager
             .buildDialog(
@@ -121,6 +164,16 @@ export class ReloadFeature extends BaseFeature {
                 'ammo-choice-dialog'
             )
             .render({ force: true });
+    }
+
+    onCloseChoiceDialog(loadout: string[]) {
+        Hooks.off('closeDialogV2', this._hookId);
+        this._hookId = -1;
+
+        if (this._handleChoiceDialogClose) {
+            this._handleChoiceDialogClose = false;
+            this.reloadReloadableWeapon(loadout);
+        }
     }
 
     async reloadReloadableWeapon(loadout: string[]) {
@@ -231,7 +284,6 @@ export class ReloadFeature extends BaseFeature {
             if (!loadout[ammo]) loadout[ammo] = 0;
             loadout[ammo] = loadout[ammo] + 1;
         });
-        console.log('getLoadoutCounts: ', currentLoadout, loadout);
         return loadout;
     }
 

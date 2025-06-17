@@ -41,16 +41,16 @@ export default class ModuleManager {
 
     systemOverrides() {
         (CONFIG as any).DND5E.featureTypes.item = {
-            label: this.uiManager.getLocalizedTxt('ItemFeature'),
+            label: this.uiManager.getLocalizedTxt('WEAPON_RELOAD.ItemFeature'),
         };
 
         (CONFIG as any).DND5E.itemProperties.concealable = {
-            label: this.uiManager.getLocalizedTxt('Concealable'),
+            label: this.uiManager.getLocalizedTxt('WEAPON_RELOAD.Concealable'),
         };
         (CONFIG as any).DND5E.validProperties.weapon.add('concealable');
 
         (CONFIG as any).DND5E.itemProperties.unstable = {
-            label: this.uiManager.getLocalizedTxt('Unstable'),
+            label: this.uiManager.getLocalizedTxt('WEAPON_RELOAD.Unstable'),
             isPhysical: true,
         };
 
@@ -94,7 +94,7 @@ export default class ModuleManager {
             hint: 'SETTINGS.WEAPON_RELOAD.FilterAmmunitionByEquipped.Hint',
             type: Boolean,
             config: true,
-            default: true,
+            default: false,
         });
     }
 
