@@ -5,19 +5,21 @@
             "Reload": {
                 "Ammunition": {
                     "ChoiceDialogButtonTxtCancel": "Cancel",
-                    "ChoiceDialogButtonTxtLoad": "Load 'em up!",
+                    "ChoiceDialogButtonTxtLoad": "Load Weapon",
                     "ChoiceDialogTitle": "Weapon Loadout"
                 },
                 "Text": "Reload",
                 "Weapon": {
                     "LoadingErrorMsg": "Trying to load too many {name}",
-                    "WeaponReloadedChatFlavor": "Quick hands and steady work. You've loaded:",
-                    "WeaponReloadedChatMsg": "{reloadableWeapon} reloaded"
+                    "WeaponReloadedChatFlavor": "You've loaded the following ammunition:",
+                    "WeaponReloadedChatFlavorCanceled": "Returning previous loadout:",
+                    "WeaponReloadedChatMsg": "{reloadableWeapon} reloaded",
+                    "WeaponReloadedChatMsgCanceled": "{reloadableWeapon} reload canceled"
                 }
             },
             "ReloadableWeaponAttack": {
-                "DryFireDescription": "Woah there, {name}! You're dry firing your {reloadableWeapon}!",
-                "DryFireTitle": "Dryfire!",
+                "DryFireDescription": "You have dry fired your {reloadableWeapon}, {name}!",
+                "DryFireTitle": "Dry fire",
                 "MisfiredBtnTxt": "Misfire",
                 "MisfireNatOne": "<strong>Misfire:</strong> This round may misfire when fired; a roll of 1 is treated as a critical failure.",
                 "MisfireUnstable": "<strong>Unstable Misfire:</strong> This round may misfire when fired; a roll of {failure} <em>or lower</em> is treated as a critical failure.",

@@ -129,7 +129,7 @@ export class ReloadFeature extends BaseFeature {
                             loadout.push(elm.value);
                         }
                     }
-                    return loadout;
+                    return { loadout, reloadCanceled: false };
                 },
             },
             {
@@ -139,7 +139,7 @@ export class ReloadFeature extends BaseFeature {
                 ),
                 callback: () => {
                     this._handleChoiceDialogClose = false;
-                    return currentLoadout;
+                    return { loadout: currentLoadout, reloadCanceled: true };
                 },
             },
         ];
@@ -159,7 +159,15 @@ export class ReloadFeature extends BaseFeature {
                     ),
                     content: dialogContent,
                     buttons: dialogButtons,
-                    onSubmit: this.reloadReloadableWeapon.bind(this),
+                    onSubmit: ({
+                        loadout,
+                        reloadCanceled,
+                    }: {
+                        loadout: string[];
+                        reloadCanceled: boolean;
+                    }) => {
+                        this.reloadReloadableWeapon(loadout, reloadCanceled);
+                    },
                 },
                 'ammo-choice-dialog'
             )
@@ -172,11 +180,14 @@ export class ReloadFeature extends BaseFeature {
 
         if (this._handleChoiceDialogClose) {
             this._handleChoiceDialogClose = false;
-            this.reloadReloadableWeapon(loadout);
+            this.reloadReloadableWeapon(loadout, true);
         }
     }
 
-    async reloadReloadableWeapon(loadout: string[]) {
+    async reloadReloadableWeapon(
+        loadout: string[],
+        reloadCanceled: boolean = false
+    ) {
         const reloadableWeapon = this.weapon;
         const ammoCounts = this.getLoadoutCounts(loadout);
 
@@ -213,10 +224,14 @@ export class ReloadFeature extends BaseFeature {
                         name: reloadableWeapon.name,
                     },
                     flavor: this.translate(
-                        'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatFlavor'
+                        reloadCanceled
+                            ? 'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatFlavorCanceled'
+                            : 'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatFlavor'
                     ),
                     title: this.translate(
-                        'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatMsg',
+                        reloadCanceled
+                            ? 'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatMsgCanceled'
+                            : 'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatMsg',
                         { reloadableWeapon: reloadableWeapon.name },
                         true
                     ),
