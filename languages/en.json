@@ -2,6 +2,10 @@
     "WEAPON_RELOAD": {
         "Concealable": "Concealable",
         "Features": {
+            "NextRound": {
+                "Description": "Up next in your {weapon}: <strong>{bullet}</strong>",
+                "Title": "Next Round"
+            },
             "Reload": {
                 "Ammunition": {
                     "ChoiceDialogButtonTxtCancel": "Cancel",

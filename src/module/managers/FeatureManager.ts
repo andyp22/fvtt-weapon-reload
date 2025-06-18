@@ -1,5 +1,6 @@
 import ModuleManager from './ModuleManager';
 import {
+    NextRoundFeature,
     ReloadableWeaponAttackFeature,
     ReloadableWeaponCreationFeature,
     ReloadFeature,
@@ -16,6 +17,7 @@ export default class FeatureManager {
 
     init() {
         this._features = {
+            nextRound: new NextRoundFeature(this),
             reload: new ReloadFeature(this),
             reloadableWeaponAttack: new ReloadableWeaponAttackFeature(this),
             reloadableWeaponCreation: new ReloadableWeaponCreationFeature(this),
