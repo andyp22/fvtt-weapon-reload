@@ -50,7 +50,8 @@ export default class UiManager {
         content: string,
         flavor?: string,
         sound?: string,
-        type: 0 | 1 | 2 | 3 | 4 | 5 = CONST.CHAT_MESSAGE_TYPES.OOC
+        whisper: string[] = [],
+        type: 0 | 1 | 2 | 3 | 4 | 5 = CONST.CHAT_MESSAGE_TYPES.OTHER
     ) {
         const ChatData = {
             speaker: ChatMessage.getSpeaker({ actor: speaker }),
@@ -58,6 +59,7 @@ export default class UiManager {
             flavor,
             sound,
             content,
+            whisper,
         };
         ChatMessage.create(ChatData);
     }
