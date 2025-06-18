@@ -27,7 +27,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
         Hooks.on('dnd5e.postRollConfiguration', this.onUseActivity.bind(this));
     }
 
-    async onUseActivity(d20Roll: DndD20Roll[], event: DndAttackEvent) {
+    onUseActivity(d20Roll: DndD20Roll[], event: DndAttackEvent) {
         const roll = d20Roll[0];
         const weaponData = roll?.data?.item;
         if (weaponData?.type?.baseItem !== 'reloadableWeapon') return;
@@ -36,14 +36,14 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
         this.weaponId = event.subject.item.id;
         this.characterId = event.subject.actor.id;
 
-        return await this.reloadableWeaponAttack();
+        return this.reloadableWeaponAttack();
     }
 
-    async reloadableWeaponAttack() {
-        const bullet = await this.getNextRound();
+    reloadableWeaponAttack() {
+        const bullet = this.getNextRound();
 
         if (bullet.name == 'Empty') {
-            await this.dryfireWeapon();
+            this.dryfireWeapon();
 
             // Stop the attack if Dryfiring the weapon
             return false;
@@ -59,7 +59,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
             this.onRenderChatMessage.bind(this)
         );
 
-        return await this.fireRound(bullet);
+        return this.fireRound(bullet);
     }
 
     async onRenderChatMessage(message, html) {
@@ -152,7 +152,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
         }
     }
 
-    async getNextRound(): Promise<DndItem5e> {
+    getNextRound(): DndItem5e {
         const character = this.character;
         const weapon = this.weapon;
 
@@ -161,7 +161,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
         const nextRound = loadout.shift();
 
         // Remove the bullet from the reloadableWeapon ammunition
-        await weapon.setFlag(this.moduleManager.id, 'chambered', loadout);
+        weapon.setFlag(this.moduleManager.id, 'chambered', loadout);
 
         const inventoryAmmunition = this.ammunition(
             character.items
@@ -177,7 +177,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
         );
     }
 
-    async dryfireWeapon() {
+    dryfireWeapon() {
         const character = this.character;
         const weapon = this.weapon;
 
@@ -222,16 +222,20 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
             ],
         };
 
+        this.renderCard(templateData, character);
+    }
+
+    async renderCard(templateData, character) {
         const htmlTemplate = await (
             foundry.applications as any
         ).handlebars.renderTemplate(
-            'modules/fvtt-weapon-reload/templates/overrides/activity-card.hbs',
+            'modules/fvtt-weapon-reload/templates/activity-card.hbs',
             templateData
         );
         this.moduleManager.uiManager.sendChat(character, htmlTemplate);
     }
 
-    async fireRound(bullet: DndItem5e) {
+    fireRound(bullet: DndItem5e) {
         const reloadableWeapon = this.weapon;
         const maxShots = parseInt(reloadableWeapon.system.uses.max);
         const firedLoadout =
@@ -242,11 +246,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
 
         firedLoadout.unshift(bullet.name);
         firedLoadout.splice(-1);
-        await reloadableWeapon.setFlag(
-            this.moduleManager.id,
-            'fired',
-            firedLoadout
-        );
+        reloadableWeapon.setFlag(this.moduleManager.id, 'fired', firedLoadout);
 
         const uses = reloadableWeapon.system.uses;
         const qty: number =
@@ -254,7 +254,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
                 ? uses.spent + 1
                 : parseInt(uses.max);
 
-        await reloadableWeapon.update({
+        reloadableWeapon.update({
             'system.uses.spent': qty,
             'system.uses.value': parseInt(uses.max) - qty,
         });

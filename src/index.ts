@@ -7,7 +7,6 @@ Hooks.once('init', async () => {
     console.log('Eberron West | Foundry VTT Module');
 
     const weapon_reload = new ModuleManager(moduleJson.id);
-    weapon_reload.debug(true);
     weapon_reload.init();
 });
 
