@@ -21,7 +21,7 @@ export class ReloadFeature extends BaseFeature {
     }
 
     init() {
-        Hooks.on('dnd5e.postUseActivity', this.onUseActivity.bind(this));
+        Hooks.on('dnd5e.preUseActivity', this.onUseActivity.bind(this));
     }
 
     onUseActivity(activity: any) {
@@ -31,7 +31,9 @@ export class ReloadFeature extends BaseFeature {
             this.characterId = activity.actor.id;
             this.weaponId = activity.item.id;
             this.weaponReload();
+            return false;
         }
+        return true;
     }
 
     weaponReload(refundAmmo: boolean = true) {
