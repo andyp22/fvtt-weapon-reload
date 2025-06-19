@@ -69,7 +69,7 @@ export interface DndItem5e extends Item5e {
         recovery?: string;
     };
     update: (obj: { [key: string]: any }) => Promise<this>;
-    use(config?: object, dialog?: object, message?: object);
+    use: (config?: object, dialog?: object, message?: object) => void;
 }
 
 export interface DndActor5e extends Actor5e {

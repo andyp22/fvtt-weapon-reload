@@ -8,7 +8,7 @@ export default class TemplateManager {
     }
 
     static get paths() {
-        const paths = {};
+        const paths: { [key: string]: string } = {};
         const templatePaths = '__ALL_TEMPLATES__'.split(',');
         for (const path of templatePaths) {
             paths[path.replace('.hbs', '.html')] = path;

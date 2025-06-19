@@ -122,12 +122,21 @@ export class ReloadFeature extends BaseFeature {
                 label: this.translate(
                     'WEAPON_RELOAD.Features.Reload.Ammunition.ChoiceDialogButtonTxtLoad'
                 ),
-                callback: (_event, button) => {
+                callback: (
+                    _event: PointerEvent | SubmitEvent,
+                    button: HTMLButtonElement
+                ) => {
                     this._handleChoiceDialogClose = false;
                     const loadout: string[] = [];
-                    for (let i = 0; i < button.form.elements.length; i++) {
-                        const elm = button.form.elements.item(i);
-                        if (elm.name == 'ammo-select') {
+                    for (
+                        let i = 0;
+                        i < (button.form?.elements?.length as number);
+                        i++
+                    ) {
+                        const elm = button.form?.elements.item(
+                            i
+                        ) as HTMLSelectElement;
+                        if (elm?.name == 'ammo-select') {
                             loadout.push(elm.value);
                         }
                     }
@@ -167,8 +176,11 @@ export class ReloadFeature extends BaseFeature {
                     }: {
                         loadout: string[];
                         reloadCanceled: boolean;
-                    }) => {
-                        this.reloadReloadableWeapon(loadout, reloadCanceled);
+                    }): Promise<void> => {
+                        return this.reloadReloadableWeapon(
+                            loadout,
+                            reloadCanceled
+                        );
                     },
                 },
                 'ammo-choice-dialog'
@@ -247,6 +259,7 @@ export class ReloadFeature extends BaseFeature {
         } else {
             await this.weaponReload(false);
         }
+        return;
     }
 
     removeLoadout(counts: { [key: string]: number }): boolean {
@@ -296,7 +309,7 @@ export class ReloadFeature extends BaseFeature {
     getLoadoutCounts(currentLoadout: string[]): {
         [key: string]: number;
     } {
-        const loadout = {};
+        const loadout: { [key: string]: number } = {};
         currentLoadout.forEach((ammo: string) => {
             if (!loadout[ammo]) loadout[ammo] = 0;
             loadout[ammo] = loadout[ammo] + 1;

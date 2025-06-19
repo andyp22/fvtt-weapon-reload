@@ -1,6 +1,21 @@
 import { DndActor5e } from '../types/dnd.types';
 import ModuleManager from './ModuleManager';
 
+type DialogOptions = {
+    title: string;
+    contentClasses?: string[];
+    content: string;
+    buttons: {
+        action: string;
+        label: string;
+        callback: (
+            event: PointerEvent | SubmitEvent,
+            button: HTMLButtonElement
+        ) => any;
+    }[];
+    onSubmit: (data: any) => Promise<void>;
+};
+
 export default class UiManager {
     private _moduleManager: ModuleManager;
 
@@ -16,7 +31,7 @@ export default class UiManager {
         return this._moduleManager;
     }
 
-    buildDialog(options, id) {
+    buildDialog(options: DialogOptions, id: string) {
         return new foundry.applications.api.DialogV2({
             window: {
                 title: options.title,

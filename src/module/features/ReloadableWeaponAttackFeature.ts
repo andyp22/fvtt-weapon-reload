@@ -7,7 +7,7 @@ import {
     DndAttackEvent,
 } from '../types/dnd.types';
 
-import { ActivityCardChatType } from '../types/chat.types';
+import { ActivityCardChatType, ChatMessage5e } from '../types/chat.types';
 import BaseFeature from './BaseFeature';
 
 export class ReloadableWeaponAttackFeature extends BaseFeature {
@@ -45,24 +45,31 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
         if (bullet.name == 'Empty') {
             this.dryfireWeapon();
 
-            // Stop the attack if Dryfiring the weapon
-            return false;
+            // Stop the attack if Dry firing the weapon and there are no other bullets left
+            if (
+                this.weapon.system.uses.spent ==
+                parseInt(this.weapon.system.uses.max)
+            ) {
+                return false;
+            }
         }
 
-        this._nextRound = {
-            id: bullet.id,
-            type: bullet.type,
-        };
+        if (bullet.name !== 'Empty') {
+            this._nextRound = {
+                id: bullet.id,
+                type: bullet.type,
+            };
 
-        this._hookId = Hooks.on(
-            'dnd5e.renderChatMessage',
-            this.onRenderChatMessage.bind(this)
-        );
+            this._hookId = Hooks.on(
+                'dnd5e.renderChatMessage',
+                this.onRenderChatMessage.bind(this)
+            );
+        }
 
         return this.fireRound(bullet);
     }
 
-    async onRenderChatMessage(message, html) {
+    async onRenderChatMessage(message: ChatMessage5e, html: HTMLElement) {
         const itemId = message.flags.dnd5e?.item.id;
         const itemType = message.flags.dnd5e?.item.type;
         if (
@@ -111,10 +118,10 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
                           );
 
                 const cardContentElement =
-                    parentElement.querySelector('.card-content');
+                    parentElement?.querySelector('.card-content');
                 const wrapperElement =
-                    cardContentElement.querySelector('.wrapper');
-                wrapperElement.insertAdjacentHTML(
+                    cardContentElement?.querySelector('.wrapper');
+                wrapperElement?.insertAdjacentHTML(
                     'beforeend',
                     `<p>${criticalFailureMsg}</p>`
                 );
@@ -123,14 +130,14 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
             // Add card button container if missing
             if (itemcard && !activationCard) {
                 const referenceElement =
-                    parentElement.querySelector('.card-header');
+                    parentElement?.querySelector('.card-header');
                 const buttonContainer = document.createElement('div');
                 buttonContainer.className = 'card-buttons';
-                referenceElement.after(buttonContainer);
+                referenceElement?.after(buttonContainer);
             }
 
             const cardButtonsElement =
-                parentElement.querySelector('.card-buttons');
+                parentElement?.querySelector('.card-buttons');
 
             // Add Misfire button
             if (checkMisfire) {
@@ -139,7 +146,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
                 misfireBtn.innerHTML = `${this.makeIcon('fa-burst')}${this.translate(
                     'WEAPON_RELOAD.Features.ReloadableWeaponAttack.MisfiredBtnTxt'
                 )}`;
-                cardButtonsElement.append(misfireBtn);
+                cardButtonsElement?.append(misfireBtn);
             }
 
             // Add ammo refund button
@@ -148,7 +155,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
             refundBtn.innerHTML = `${this.makeIcon('fa-undo')}${this.translate(
                 'WEAPON_RELOAD.Features.ReloadableWeaponAttack.RefundBtnTxt'
             )}`;
-            cardButtonsElement.append(refundBtn);
+            cardButtonsElement?.append(refundBtn);
         }
     }
 
@@ -225,7 +232,10 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
         this.renderCard(templateData, character);
     }
 
-    async renderCard(templateData, character) {
+    async renderCard(
+        templateData: ActivityCardChatType,
+        character: DndActor5e
+    ) {
         const htmlTemplate = await (
             foundry.applications as any
         ).handlebars.renderTemplate(
@@ -259,7 +269,10 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
             'system.uses.value': parseInt(uses.max) - qty,
         });
 
-        return bullet.use();
+        if (bullet.name !== 'Empty') {
+            bullet.use();
+        }
+        return true;
     }
 
     reload(actor: DndActor5e, reloadableWeapon: DndItem5e) {

@@ -21,3 +21,7 @@ export interface ActivityCardChatType {
     supplements?: string[];
     properties?: string[];
 }
+
+export interface ChatMessage5e extends ChatMessage {
+    flags: { [key: string]: any };
+}
