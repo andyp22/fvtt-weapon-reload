@@ -46,31 +46,20 @@ export default class BaseFeature {
     }
 
     get loadout() {
-        const reloadableWeapon = this.weapon;
-        const maxShots = reloadableWeapon.system.uses.max;
-        const currentLoadout =
-            (reloadableWeapon.getFlag(
-                this.moduleManager.id,
-                'chambered'
-            ) as string[]) || new Array(maxShots).fill('Empty');
-
-        if (currentLoadout.length < maxShots) {
-            const missing = maxShots - currentLoadout.length;
-            for (let i = 0; i < missing; i++) {
-                currentLoadout.push('Empty');
-            }
-        }
-
-        return currentLoadout;
+        return this.getReloadFlag('chambered');
     }
 
     get fired() {
+        return this.getReloadFlag('fired');
+    }
+
+    getReloadFlag(name: string) {
         const reloadableWeapon = this.weapon;
         const maxShots = reloadableWeapon.system.uses.max;
         const fired =
             (reloadableWeapon.getFlag(
                 this.moduleManager.id,
-                'fired'
+                name
             ) as string[]) || new Array(maxShots).fill('Empty');
 
         if (fired.length < maxShots) {
