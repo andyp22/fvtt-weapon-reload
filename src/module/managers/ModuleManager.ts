@@ -35,7 +35,6 @@ export default class ModuleManager {
         this.systemOverrides();
         this.moduleConfigurations();
         this._featureManager.init();
-        this._uiManager.init();
         this._templateManager.init();
     }
 

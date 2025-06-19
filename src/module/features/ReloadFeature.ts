@@ -1,14 +1,7 @@
 import DialogV2 from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client-esm/applications/api/dialog.mjs';
 import FeatureManager from '../managers/FeatureManager';
-import { DndActor5e, DndItem5e } from '../types/dnd.types';
 import BaseFeature from './BaseFeature';
-
-interface AmmoItemOption {
-    name: string;
-    value: string;
-    count: number;
-    equipped: boolean;
-}
+import { type AmmoItemOption, DndItem5e } from '../types';
 
 export class ReloadFeature extends BaseFeature {
     private _hookId: number;
@@ -109,9 +102,9 @@ export class ReloadFeature extends BaseFeature {
         ).handlebars.renderTemplate(
             'modules/fvtt-weapon-reload/templates/ammoSelectionDialogTemplate.hbs',
             {
-                loadoutSlots: new Array(
-                    parseInt(this.weapon.system.uses.max)
-                ).fill('Empty'),
+                loadoutSlots: new Array(this.weapon.system.uses.max).fill(
+                    'Empty'
+                ),
                 ammoOptions,
             }
         );
@@ -214,8 +207,7 @@ export class ReloadFeature extends BaseFeature {
             }
             await reloadableWeapon.update({
                 'system.uses.spent': qty,
-                'system.uses.value':
-                    parseInt(reloadableWeapon.system.uses.max) - qty,
+                'system.uses.value': reloadableWeapon.system.uses.max - qty,
             });
             await reloadableWeapon.setFlag(
                 this.moduleManager.id,
@@ -225,7 +217,7 @@ export class ReloadFeature extends BaseFeature {
             await reloadableWeapon.setFlag(
                 this.moduleManager.id,
                 'fired',
-                new Array(parseInt(this.weapon.system.uses.max)).fill('Empty')
+                new Array(this.weapon.system.uses.max).fill('Empty')
             );
 
             const htmlTemplate = await (
@@ -299,7 +291,7 @@ export class ReloadFeature extends BaseFeature {
         return ammunitionAvailable;
     }
 
-    async onReloadCallback(actor: DndActor5e, weapon: DndItem5e) {
+    async onReloadCallback(actor: Actor5e, weapon: DndItem5e) {
         this.characterId = actor.id;
         this.weaponId = weapon.id;
 

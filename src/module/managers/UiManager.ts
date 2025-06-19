@@ -1,30 +1,11 @@
-import { DndActor5e } from '../types/dnd.types';
 import ModuleManager from './ModuleManager';
-
-type DialogOptions = {
-    title: string;
-    contentClasses?: string[];
-    content: string;
-    buttons: {
-        action: string;
-        label: string;
-        callback: (
-            event: PointerEvent | SubmitEvent,
-            button: HTMLButtonElement
-        ) => any;
-    }[];
-    onSubmit: (data: any) => Promise<void>;
-};
+import { type DialogOptions } from '../types';
 
 export default class UiManager {
     private _moduleManager: ModuleManager;
 
     constructor(moduleManager: ModuleManager) {
         this._moduleManager = moduleManager;
-    }
-
-    init() {
-        // EMPTY FOR NOW
     }
 
     get moduleManager() {
@@ -61,7 +42,7 @@ export default class UiManager {
     }
 
     sendChat(
-        speaker: DndActor5e,
+        speaker: Actor5e,
         content: string,
         flavor?: string,
         sound?: string,

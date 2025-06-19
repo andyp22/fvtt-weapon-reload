@@ -1,7 +1,6 @@
 import FeatureManager from '../managers/FeatureManager';
-
-import { DndItem5e } from '../types/dnd.types';
 import BaseFeature from './BaseFeature';
+import { DndItem5e } from '../types';
 
 export class ReloadableWeaponCreationFeature extends BaseFeature {
     private _creatingReloadableWeapon: boolean;
@@ -38,7 +37,7 @@ export class ReloadableWeaponCreationFeature extends BaseFeature {
         console.log('Weapon Reload | Triggered ReloadableWeapon Creation');
 
         const reloadableWeapon = this.weapon;
-        const ammoQty = parseInt(reloadableWeapon.system.uses.max);
+        const ammoQty = reloadableWeapon.system.uses.max;
 
         await reloadableWeapon.update({
             'system.uses.spent': ammoQty,

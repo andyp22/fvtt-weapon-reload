@@ -1,14 +1,13 @@
 import FeatureManager from '../managers/FeatureManager';
+import BaseFeature from './BaseFeature';
 
 import {
-    DndActor5e,
+    ActivityCardChatType,
+    ChatMessage5e,
     DndItem5e,
     DndD20Roll,
     DndAttackEvent,
-} from '../types/dnd.types';
-
-import { ActivityCardChatType, ChatMessage5e } from '../types/chat.types';
-import BaseFeature from './BaseFeature';
+} from '../types';
 
 export class ReloadableWeaponAttackFeature extends BaseFeature {
     private _nextRound: {
@@ -46,10 +45,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
             this.dryfireWeapon();
 
             // Stop the attack if Dry firing the weapon and there are no other bullets left
-            if (
-                this.weapon.system.uses.spent ==
-                parseInt(this.weapon.system.uses.max)
-            ) {
+            if (this.weapon.system.uses.spent == this.weapon.system.uses.max) {
                 return false;
             }
         }
@@ -232,10 +228,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
         this.renderCard(templateData, character);
     }
 
-    async renderCard(
-        templateData: ActivityCardChatType,
-        character: DndActor5e
-    ) {
+    async renderCard(templateData: ActivityCardChatType, character: Actor5e) {
         const htmlTemplate = await (
             foundry.applications as any
         ).handlebars.renderTemplate(
@@ -247,7 +240,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
 
     fireRound(bullet: DndItem5e) {
         const reloadableWeapon = this.weapon;
-        const maxShots = parseInt(reloadableWeapon.system.uses.max);
+        const maxShots = reloadableWeapon.system.uses.max;
         const firedLoadout =
             (reloadableWeapon.getFlag(
                 this.moduleManager.id,
@@ -260,13 +253,11 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
 
         const uses = reloadableWeapon.system.uses;
         const qty: number =
-            uses.spent + 1 <= parseInt(uses.max)
-                ? uses.spent + 1
-                : parseInt(uses.max);
+            uses.spent + 1 <= uses.max ? uses.spent + 1 : uses.max;
 
         reloadableWeapon.update({
             'system.uses.spent': qty,
-            'system.uses.value': parseInt(uses.max) - qty,
+            'system.uses.value': uses.max - qty,
         });
 
         if (bullet.name !== 'Empty') {
@@ -275,7 +266,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
         return true;
     }
 
-    reload(actor: DndActor5e, reloadableWeapon: DndItem5e) {
+    reload(actor: Actor5e, reloadableWeapon: DndItem5e) {
         this.featureManager
             .getFeature('reload')
             .onReloadCallback(actor, reloadableWeapon);
@@ -331,7 +322,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
         const qty: number = uses.spent - 1 >= 0 ? uses.spent - 1 : 0;
         reloadableWeapon.update({
             'system.uses.spent': qty,
-            'system.uses.value': parseInt(uses.max) - qty,
+            'system.uses.value': uses.max - qty,
         });
 
         // Notify the user that the refund was a success

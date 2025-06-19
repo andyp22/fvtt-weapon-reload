@@ -1,6 +1,5 @@
 import FeatureManager from '../managers/FeatureManager';
-
-import { DndActor5e, DndItem5e } from '../types/dnd.types';
+import { DndItem5e } from '../types';
 
 export default class BaseFeature {
     private _featureManager: FeatureManager;
@@ -22,8 +21,8 @@ export default class BaseFeature {
         return this._featureManager.moduleManager;
     }
 
-    get character(): DndActor5e {
-        return game?.actors?.get(this._actorId) as DndActor5e;
+    get character(): Actor5e {
+        return game?.actors?.get(this._actorId) as Actor5e;
     }
 
     get characterId() {
@@ -48,7 +47,7 @@ export default class BaseFeature {
 
     get loadout() {
         const reloadableWeapon = this.weapon;
-        const maxShots = parseInt(reloadableWeapon.system.uses.max);
+        const maxShots = reloadableWeapon.system.uses.max;
         const currentLoadout =
             (reloadableWeapon.getFlag(
                 this.moduleManager.id,
@@ -67,7 +66,7 @@ export default class BaseFeature {
 
     get fired() {
         const reloadableWeapon = this.weapon;
-        const maxShots = parseInt(reloadableWeapon.system.uses.max);
+        const maxShots = reloadableWeapon.system.uses.max;
         const fired =
             (reloadableWeapon.getFlag(
                 this.moduleManager.id,
