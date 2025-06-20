@@ -98,12 +98,12 @@ From a developer point of view, the flow is:
 The following compendiums are provided:
 
 - Name: Items - Contains base items, preconfigured reloadable wepaons, variant reloable weapons, and ammuntion types.
-- Name: Vehicles - Contains an example of how this module can be used in conjunction with vehicles.
 
 ## Planned Features
 
 - More system support (Pathfinder 2E and 1E, etc)
-- Giving an item the `Reload` weapon property prior to adding it to an actor would automatically configure the `Reload` and `Next Round` activities.
+- Giving an item the `Reload` weapon property prior to adding it to an actor would automatically configure the `Reload` and `Next Round` activities
+- Vehicle support
 
 ## License
 
