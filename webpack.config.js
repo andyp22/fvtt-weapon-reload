@@ -22,7 +22,7 @@ module.exports = (env) => {
     const isDevelopment = environment.mode === 'development';
 
     const config = {
-        entry: ['./src/index.ts', './src/styles/module.scss'],
+        entry: ['./src/index.ts'],
         watch: environment.watch,
         devtool: 'inline-source-map',
         stats: 'minimal',
