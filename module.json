@@ -28,7 +28,7 @@
     "conflicts": [],
     "esmodules": ["build/index.mjs"],
     "scripts": [],
-    "styles": ["build/styles/module.css"],
+    "styles": [],
     "languages": [
         {
             "lang": "en",
