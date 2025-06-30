@@ -1,5 +1,7 @@
-2025/06/30-00:44:36.884 2624 Log #379: 0 ops saved to Table #380 OK
-2025/06/30-00:44:36.885 2624 Archiving E:\Foundry\UserData\Data\modules\fvtt-weapon-reload\packs\item-pack/000379.log: OK
-2025/06/30-00:44:36.894 2624 Table #319: 2 entries OK
-2025/06/30-00:44:36.942 2624 Archiving E:\Foundry\UserData\Data\modules\fvtt-weapon-reload\packs\item-pack/MANIFEST-000340: OK
-2025/06/30-00:44:36.983 2624 **** Repaired leveldb E:\Foundry\UserData\Data\modules\fvtt-weapon-reload\packs\item-pack; recovered 1 files; 2232 bytes. Some data may have been lost. ****
+2025/06/30-00:51:17.241 565c Recovering log #383
+2025/06/30-00:51:17.335 565c Delete type=0 #383
+2025/06/30-00:51:17.335 565c Delete type=3 #381
+2025/06/30-00:53:01.408 5480 Level-0 table #389: started
+2025/06/30-00:53:01.408 5480 Level-0 table #389: 0 bytes OK
+2025/06/30-00:53:01.438 5480 Delete type=0 #387
+2025/06/30-00:53:01.504 5480 Manual compaction at level-0 from '!folders!3tlsR2FXqmUYRTAs' @ 72057594037927935 : 1 .. '!items.effects!xE2vk2CUIK2c4dre.VC4VYxaOMI2NW82E' @ 0 : 0; will stop at (end)
