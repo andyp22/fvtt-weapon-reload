@@ -38,31 +38,31 @@
     ],
     "packs": [
         {
-            "name": "journal-pack",
+            "name": "weapon-reload-journal-pack",
             "label": "Journal Pack",
             "path": "packs/journal-pack",
             "type": "JournalEntry",
             "ownership": {
-                "PLAYER": "OBSERVER",
+                "PLAYER": "NONE",
                 "ASSISTANT": "OWNER"
             },
             "system": "dnd5e",
             "flags": {}
         },
         {
-            "name": "actor-pack",
+            "name": "weapon-reload-actor-pack",
             "label": "Actor Pack",
             "path": "packs/actor-pack",
             "type": "Actor",
             "ownership": {
-                "PLAYER": "OBSERVER",
+                "PLAYER": "NONE",
                 "ASSISTANT": "OWNER"
             },
             "system": "dnd5e",
             "flags": {}
         },
         {
-            "name": "item-pack",
+            "name": "weapon-reload-item-pack",
             "label": "Item Pack",
             "path": "packs/item-pack",
             "type": "Item",
@@ -82,24 +82,24 @@
             }
         },
         {
-            "name": "macro-pack",
+            "name": "weapon-reload-macro-pack",
             "label": "Macro Pack",
             "path": "packs/macro-pack",
             "type": "Macro",
             "ownership": {
-                "PLAYER": "OBSERVER",
+                "PLAYER": "NONE",
                 "ASSISTANT": "OWNER"
             },
             "system": "dnd5e",
             "flags": {}
         },
         {
-            "name": "rollable-table-pack",
+            "name": "weapon-reload-rollable-table-pack",
             "label": "Rollable Table Pack",
             "path": "packs/rollable-table-pack",
             "type": "RollTable",
             "ownership": {
-                "PLAYER": "OBSERVER",
+                "PLAYER": "NONE",
                 "ASSISTANT": "OWNER"
             },
             "system": "dnd5e",
@@ -115,11 +115,11 @@
                 "PLAYER": "NONE"
             },
             "packs": [
-                "journal-pack",
-                "actor-pack",
-                "item-pack",
-                "macro-pack",
-                "rollable-table-pack"
+                "weapon-reload-journal-pack",
+                "weapon-reload-actor-pack",
+                "weapon-reload-item-pack",
+                "weapon-reload-macro-pack",
+                "weapon-reload-rollable-table-pack"
             ]
         }
     ]
