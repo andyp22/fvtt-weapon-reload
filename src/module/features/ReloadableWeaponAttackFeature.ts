@@ -251,16 +251,16 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
         firedLoadout.splice(-1);
         reloadableWeapon.setFlag(this.moduleManager.id, 'fired', firedLoadout);
 
-        const uses = reloadableWeapon.system.uses;
-        const qty: number =
-            uses.spent + 1 <= uses.max ? uses.spent + 1 : uses.max;
-
-        reloadableWeapon.update({
-            'system.uses.spent': qty,
-            'system.uses.value': uses.max - qty,
-        });
-
         if (bullet.name !== 'Empty') {
+            const uses = reloadableWeapon.system.uses;
+            const qty: number =
+                uses.spent + 1 <= uses.max ? uses.spent + 1 : uses.max;
+
+            reloadableWeapon.update({
+                'system.uses.spent': qty,
+                'system.uses.value': uses.max - qty,
+            });
+
             bullet.use();
         }
         return true;

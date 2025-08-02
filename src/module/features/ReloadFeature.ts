@@ -93,6 +93,16 @@ export class ReloadFeature extends BaseFeature {
         return availableAmmunition;
     }
 
+    onSubmitChooseAmmunition({
+        loadout,
+        reloadCanceled,
+    }: {
+        loadout: string[];
+        reloadCanceled: boolean;
+    }): Promise<void> {
+        return this.reloadReloadableWeapon(loadout, reloadCanceled);
+    }
+
     async chooseAmmunition(
         ammoOptions: AmmoItemOption[],
         currentLoadout: string[]
@@ -148,12 +158,14 @@ export class ReloadFeature extends BaseFeature {
             },
         ];
 
-        this._handleChoiceDialogClose = true;
-        this._hookId = Hooks.on('closeDialogV2', (dialogV2: DialogV2) => {
+        const onCloseDialogHook = (dialogV2: DialogV2) => {
             if (dialogV2.id === 'ammo-choice-dialog') {
                 this.onCloseChoiceDialog(currentLoadout);
             }
-        });
+        };
+
+        this._handleChoiceDialogClose = true;
+        this._hookId = Hooks.on('closeDialogV2', onCloseDialogHook.bind(this));
 
         this.moduleManager.uiManager
             .buildDialog(
@@ -163,18 +175,7 @@ export class ReloadFeature extends BaseFeature {
                     ),
                     content: dialogContent,
                     buttons: dialogButtons,
-                    onSubmit: ({
-                        loadout,
-                        reloadCanceled,
-                    }: {
-                        loadout: string[];
-                        reloadCanceled: boolean;
-                    }): Promise<void> => {
-                        return this.reloadReloadableWeapon(
-                            loadout,
-                            reloadCanceled
-                        );
-                    },
+                    onSubmit: this.onSubmitChooseAmmunition.bind(this),
                 },
                 'ammo-choice-dialog'
             )
@@ -191,12 +192,45 @@ export class ReloadFeature extends BaseFeature {
         }
     }
 
+    async buildReloadChat(
+        reloadableWeapon: Item5e,
+        reloadCanceled: boolean,
+        loadout: string[]
+    ) {
+        return await (foundry.applications as any).handlebars.renderTemplate(
+            'modules/fvtt-weapon-reload/templates/reloadableWeaponReloadTemplate.hbs',
+            {
+                item: {
+                    img: reloadableWeapon.img,
+                    name: reloadableWeapon.name,
+                },
+                flavor: this.translate(
+                    reloadCanceled
+                        ? 'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatFlavorCanceled'
+                        : 'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatFlavor'
+                ),
+                title: this.translate(
+                    reloadCanceled
+                        ? 'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatMsgCanceled'
+                        : 'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatMsg',
+                    { reloadableWeapon: reloadableWeapon.name },
+                    true
+                ),
+                loadout: loadout,
+            }
+        );
+    }
+
     async reloadReloadableWeapon(
         loadout: string[],
         reloadCanceled: boolean = false
     ) {
         const reloadableWeapon = this.weapon;
         const ammoCounts = this.getLoadoutCounts(loadout);
+        const canceledLoadout = new Array(this.weapon.system.uses.max).fill(
+            'Empty'
+        );
+        let htmlTemplate;
 
         if (this.removeLoadout(ammoCounts)) {
             // Update the reloadableWeapon uses
@@ -214,43 +248,36 @@ export class ReloadFeature extends BaseFeature {
                 'chambered',
                 loadout
             );
+
+            htmlTemplate = await this.buildReloadChat(
+                reloadableWeapon,
+                reloadCanceled,
+                loadout
+            );
+        } else {
+            Hooks.off('closeDialogV2', this._hookId);
+            this._hookId = -1;
             await reloadableWeapon.setFlag(
                 this.moduleManager.id,
-                'fired',
-                new Array(this.weapon.system.uses.max).fill('Empty')
+                'chambered',
+                canceledLoadout
             );
-
-            const htmlTemplate = await (
-                foundry.applications as any
-            ).handlebars.renderTemplate(
-                'modules/fvtt-weapon-reload/templates/reloadableWeaponReloadTemplate.hbs',
-                {
-                    item: {
-                        img: reloadableWeapon.img,
-                        name: reloadableWeapon.name,
-                    },
-                    flavor: this.translate(
-                        reloadCanceled
-                            ? 'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatFlavorCanceled'
-                            : 'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatFlavor'
-                    ),
-                    title: this.translate(
-                        reloadCanceled
-                            ? 'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatMsgCanceled'
-                            : 'WEAPON_RELOAD.Features.Reload.Weapon.WeaponReloadedChatMsg',
-                        { reloadableWeapon: reloadableWeapon.name },
-                        true
-                    ),
-                    loadout: loadout,
-                }
+            htmlTemplate = await this.buildReloadChat(
+                reloadableWeapon,
+                reloadCanceled,
+                canceledLoadout
             );
-            // Notify the peeps
-            this.moduleManager.uiManager.sendChat(this.character, htmlTemplate);
-            this.characterId = '';
-            this.weaponId = '';
-        } else {
-            await this.weaponReload(false);
         }
+        await reloadableWeapon.setFlag(
+            this.moduleManager.id,
+            'fired',
+            canceledLoadout
+        );
+
+        this.moduleManager.uiManager.sendChat(this.character, htmlTemplate);
+        this.characterId = '';
+        this.weaponId = '';
+
         return;
     }
 
