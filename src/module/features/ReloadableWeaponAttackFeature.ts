@@ -31,6 +31,9 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
         const weaponData = roll?.data?.item;
         if (weaponData?.type?.baseItem !== 'reloadableWeapon') return;
 
+        // If this isn't an attack we need to break out or too many rounds will be consumed
+        if (!event.hookNames.includes('attack')) return;
+
         console.log('Weapon Reload | Triggered Attack');
         this.weaponId = event.subject.item.id;
         this.characterId = event.subject.actor.id;
