@@ -1,5 +1,5 @@
 import ModuleManager from './module/managers/ModuleManager';
-import TemplateManager from './module/managers/TemplateManager';
+import { rollDownSettings, listenForSystemChanges } from './utils/rolldown';
 
 import moduleJson from '../module.json';
 
@@ -10,12 +10,7 @@ Hooks.once('init', async () => {
     weapon_reload.init();
 });
 
-if (process.env.NODE_ENV === 'development') {
-    if (module.hot) {
-        module.hot.accept();
-
-        if (module.hot.status() === 'apply') {
-            TemplateManager.onHotReload();
-        }
-    }
-}
+Hooks.once('ready', async () => {
+    await rollDownSettings();
+    listenForSystemChanges();
+});

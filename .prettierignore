@@ -6,6 +6,7 @@ static
 *.min.*
 *.d.ts
 package-lock.json
+dist/*
 
 # Foundry
 package/packs
