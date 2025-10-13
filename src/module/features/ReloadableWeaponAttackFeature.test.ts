@@ -1,4 +1,5 @@
-import { makeMockReloadableWeaponAttackFeature, mocks } from '../../../tests/mocks/ConsumableDataMock';
+import { makeMockReloadableWeaponAttackFeature } from '../../../tests/mocks/moduleMocks';
+import { foundryMocks } from '../../../tests/mocks/foundryMocks';
 
 describe('ReloadableWeaponAttackFeature', () => {
   beforeEach(() => {
@@ -9,7 +10,7 @@ describe('ReloadableWeaponAttackFeature', () => {
     const feature = makeMockReloadableWeaponAttackFeature();
     feature.init();
 
-    expect(mocks.Hooks.on).toHaveBeenCalledWith(
+    expect(foundryMocks.Hooks.on).toHaveBeenCalledWith(
       'dnd5e.postRollConfiguration',
       expect.any(Function)
     );
