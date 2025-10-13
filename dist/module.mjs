@@ -895,7 +895,6 @@ Hooks.once("init", async () => {
 	new ModuleManager(module_default.id).init();
 });
 Hooks.once("ready", async () => {
-	console.log("Running roll-down checks…");
 	await rollDownSettings();
 	listenForSystemChanges();
 });
