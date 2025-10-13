@@ -26,7 +26,7 @@
         ]
     },
     "conflicts": [],
-    "esmodules": ["build/index.mjs"],
+    "esmodules": ["dist/module.mjs"],
     "scripts": [],
     "styles": [],
     "languages": [
