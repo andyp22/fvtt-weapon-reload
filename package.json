@@ -6,11 +6,12 @@
     "scripts": {
         "build": "npm run clean && npm run prettier:format && npm run rolldown:build && npm run types",
         "clean": "rimraf dist",
+        "dev:test": "npm run prettier:format && clear && npm test",
         "prettier:check": "prettier \"**/*.{js,json,md,mdx,ts,tsx,scss,css}\" --check",
         "prettier:format": "prettier \"**/*.{js,json,md,mdx,ts,tsx,scss,css}\" --write --list-different --no-error-on-unmatched-pattern",
         "rolldown:build": "rolldown --config ./configs/rolldown.config.mjs",
         "rolldown:watch": "rolldown --config ./configs/rolldown.config.mjs --watch",
-        "test": "npm run prettier:format && clear && jest --detectOpenHandles --runInBand",
+        "test": "jest --detectOpenHandles --runInBand --json --outputFile=jest.results.json",
         "types": "tsc --emitDeclarationOnly"
     },
     "repository": {},

@@ -51,3 +51,6 @@ node_modules/
 .pnp.*
 
 .DS_Store
+
+# Jest
+jest.results.json
