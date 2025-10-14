@@ -18,7 +18,7 @@ beforeAll(() => {
                 items: {
                     get: jest.fn().mockReturnValue({
                         system: {
-                            uses: {},
+                            uses: { max: 6, spent: 0, value: 6 },
                         },
                         getFlag: jest
                             .fn()

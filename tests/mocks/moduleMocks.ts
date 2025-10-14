@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals';
 import { ReloadableWeaponAttackFeature } from '../../src/module/features/ReloadableWeaponAttackFeature';
 
-const MODULE_ID = 'fvtt-weapon-reload';
+export const MODULE_ID = 'fvtt-weapon-reload';
 
 export const mockReloadFeature = {
     onReloadCallback: jest.fn(),
@@ -10,6 +10,7 @@ export const mockReloadFeature = {
 export const mockUiManager = {
     sendChat: jest.fn(),
     uiNotification: jest.fn(),
+    getLocalizedTxt: jest.fn((key: string) => `localized:${key}`),
 };
 
 export const mockModuleManager = {
@@ -53,7 +54,7 @@ export function makeMockReloadableWeaponAttackFeature(): ReloadableWeaponAttackF
 }
 
 export const moduleMocks = {
-    FeatureManager: mockFeatureManager,
-    ModuleManager: mockModuleManager,
-    UiManager: mockUiManager,
+    MockFeatureManager: mockFeatureManager,
+    MockModuleManager: mockModuleManager,
+    MockUiManager: mockUiManager,
 };
