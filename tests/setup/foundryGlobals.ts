@@ -7,6 +7,16 @@ beforeAll(() => {
         },
     };
 
+    (global as any).CONFIG = {
+        DND5E: {
+            featureTypes: {},
+            itemProperties: {},
+            validProperties: { weapon: new Set() },
+            weaponIds: {},
+        },
+        debug: {},
+    };
+
     (global as any).Hooks = {
         on: jest.fn(),
         once: jest.fn(),
@@ -18,6 +28,7 @@ beforeAll(() => {
         settings: {
             get: jest.fn().mockReturnValue(false),
             set: jest.fn(),
+            register: jest.fn(),
         },
         actors: {
             get: jest.fn().mockReturnValue({
