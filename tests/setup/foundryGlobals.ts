@@ -3,7 +3,8 @@ import { jest } from '@jest/globals';
 beforeAll(() => {
     (global as any).CONST = {
         CHAT_MESSAGE_TYPES: {
-            WHISPER: 'whisper',
+            OTHER: 0,
+            WHISPER: 1,
         },
     };
 
@@ -50,16 +51,38 @@ beforeAll(() => {
                 },
             }),
         },
+        i18n: {
+            localize: jest.fn((key) => `localized:${key}`),
+            format: jest.fn(
+                (key, opts) => `formatted:${key}:${JSON.stringify(opts)}`
+            ),
+        },
     };
 
     (global as any).foundry = {
         applications: {
+            api: {
+                DialogV2: jest.fn(),
+            },
             handlebars: {
                 renderTemplate: jest.fn(async () => {
                     return `<div>Rendered Template</div>`;
                 }),
             },
         },
+    };
+
+    (globalThis as any).ui = {
+        notifications: {
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        },
+    };
+
+    (globalThis as any).ChatMessage = {
+        getSpeaker: jest.fn().mockImplementation(() => ({ alias: 'Speaker' })),
+        create: jest.fn(),
     };
 
     (global as any).Roll = jest.fn().mockReturnValue({
