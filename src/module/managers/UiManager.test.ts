@@ -34,7 +34,9 @@ describe('UiManager.buildDialog()', () => {
 
         const result = uiManager.buildDialog(options as any, 'dialog-id');
 
-        expect(foundry.applications.api.DialogV2).toHaveBeenCalledWith({
+        expect(
+            (global as any).foundry.applications.api.DialogV2
+        ).toHaveBeenCalledWith({
             window: { title: 'Test Title', contentClasses: [] },
             content: '<p>test</p>',
             buttons: options.buttons,
@@ -47,35 +49,35 @@ describe('UiManager.buildDialog()', () => {
 
 describe('UiManager.uiNotification()', () => {
     test('calls ui.notifications.error for type="error"', () => {
-            uiManager.uiNotification('bad', 'error');
-            expect((global as any).ui.notifications.error).toHaveBeenCalledWith(
-                'bad'
-            );
-        });
+        uiManager.uiNotification('bad', 'error');
+        expect((global as any).ui.notifications.error).toHaveBeenCalledWith(
+            'bad'
+        );
+    });
 
-        test('calls ui.notifications.warn for type="warn"', () => {
-            uiManager.uiNotification('warned', 'warn');
-            expect((global as any).ui.notifications.warn).toHaveBeenCalledWith(
-                'warned'
-            );
-        });
+    test('calls ui.notifications.warn for type="warn"', () => {
+        uiManager.uiNotification('warned', 'warn');
+        expect((global as any).ui.notifications.warn).toHaveBeenCalledWith(
+            'warned'
+        );
+    });
 
-        test('calls ui.notifications.info for type="info" or default', () => {
-            uiManager.uiNotification('info');
-            expect((global as any).ui.notifications.info).toHaveBeenCalledWith(
-                'info'
-            );
+    test('calls ui.notifications.info for type="info" or default', () => {
+        uiManager.uiNotification('info');
+        expect((global as any).ui.notifications.info).toHaveBeenCalledWith(
+            'info'
+        );
 
-            uiManager.uiNotification('implicit-default');
-            expect((global as any).ui.notifications.info).toHaveBeenCalledWith(
-                'implicit-default'
-            );
-        });
+        uiManager.uiNotification('implicit-default');
+        expect((global as any).ui.notifications.info).toHaveBeenCalledWith(
+            'implicit-default'
+        );
+    });
 
-        test('does nothing if ui.notifications is undefined', () => {
-            (globalThis as any).ui = {};
-            expect(() => uiManager.uiNotification('test')).not.toThrow();
-        });
+    test('does nothing if ui.notifications is undefined', () => {
+        (globalThis as any).ui = {};
+        expect(() => uiManager.uiNotification('test')).not.toThrow();
+    });
 });
 
 describe('UiManager.sendChat()', () => {
@@ -85,10 +87,12 @@ describe('UiManager.sendChat()', () => {
 
         uiManager.sendChat(actor, content);
 
-        expect(ChatMessage.getSpeaker).toHaveBeenCalledWith({ actor });
-        expect(ChatMessage.create).toHaveBeenCalledWith({
+        expect((global as any).ChatMessage.getSpeaker).toHaveBeenCalledWith({
+            actor,
+        });
+        expect((global as any).ChatMessage.create).toHaveBeenCalledWith({
             speaker: { alias: 'Speaker' },
-            type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+            type: (global as any).CONST.CHAT_MESSAGE_TYPES.OTHER,
             flavor: undefined,
             sound: undefined,
             content,
@@ -99,16 +103,21 @@ describe('UiManager.sendChat()', () => {
 
 describe('UiManager.getLocalizedTxt()', () => {
     test('calls game.i18n.localize by default', () => {
-            const result = uiManager.getLocalizedTxt('KEY');
-            expect(game.i18n.localize).toHaveBeenCalledWith('KEY', undefined);
-            expect(result).toBe('localized:KEY');
-        });
+        const result = uiManager.getLocalizedTxt('KEY');
+        expect((global as any).game.i18n.localize).toHaveBeenCalledWith(
+            'KEY',
+            undefined
+        );
+        expect(result).toBe('localized:KEY');
+    });
 
-        test('calls game.i18n.format when format=true', () => {
-            const result = uiManager.getLocalizedTxt('KEY', { x: '1' }, true);
-            expect(game.i18n.format).toHaveBeenCalledWith('KEY', { x: '1' });
-            expect(result).toContain('formatted:KEY');
+    test('calls game.i18n.format when format=true', () => {
+        const result = uiManager.getLocalizedTxt('KEY', { x: '1' }, true);
+        expect((global as any).game.i18n.format).toHaveBeenCalledWith('KEY', {
+            x: '1',
         });
+        expect(result).toContain('formatted:KEY');
+    });
 });
 
 describe('UiManager.toString()', () => {
