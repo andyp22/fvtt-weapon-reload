@@ -1,9 +1,9 @@
 {
-    "extends": "./configs/tsconfig.base.json",
+    "extends": "./tsconfig.base.json",
     "compilerOptions": {
         "baseUrl": ".",
         "lib": ["es2015", "es2019", "dom"],
-        "outDir": "dist",
+        "outDir": "../dist",
         "paths": {
             "@src/*": ["src/*"]
         },
@@ -14,6 +14,6 @@
             "node"
         ]
     },
-    "include": ["src/**/*", "tests/**/*"],
-    "exclude": ["**/*.test.ts"]
+    "include": ["../src/**/*"],
+    "exclude": ["../**/*.test.ts"]
 }

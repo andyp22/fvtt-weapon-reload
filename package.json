@@ -13,7 +13,7 @@
         "rolldown:watch": "rolldown --config ./configs/rolldown.config.mjs --watch",
         "test": "jest --detectOpenHandles --runInBand --json --outputFile=jest.results.json",
         "test:watch": "jest --detectOpenHandles --runInBand --watch",
-        "types": "tsc --emitDeclarationOnly"
+        "types": "tsc --emitDeclarationOnly --project ./configs/tsconfig.types.json"
     },
     "repository": {},
     "author": "andyp22",
