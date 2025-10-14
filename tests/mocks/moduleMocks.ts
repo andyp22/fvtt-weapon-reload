@@ -11,6 +11,9 @@ export const mockUiManager = {
     sendChat: jest.fn(),
     uiNotification: jest.fn(),
     getLocalizedTxt: jest.fn((key: string) => `localized:${key}`),
+    buildDialog: jest.fn(() => ({
+        render: jest.fn(),
+    })),
 };
 
 export const mockModuleManager = {
