@@ -1,6 +1,12 @@
 import { jest } from '@jest/globals';
 
 beforeAll(() => {
+    (global as any).CONST = {
+        CHAT_MESSAGE_TYPES: {
+            WHISPER: 'whisper',
+        },
+    };
+
     (global as any).Hooks = {
         on: jest.fn(),
         once: jest.fn(),

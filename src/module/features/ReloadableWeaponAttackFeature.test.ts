@@ -599,6 +599,8 @@ describe('ReloadableWeaponAttackFeature.makeIcon()', () => {
 
 describe('ReloadableWeaponAttackFeature.toString()', () => {
     test('returns class name string', () => {
-        expect(feature.toString()).toBe('class ReloadableWeaponAttackFeature');
+        expect(feature.toString()).toMatchInlineSnapshot(
+            `"class ReloadableWeaponAttackFeature"`
+        );
     });
 });
