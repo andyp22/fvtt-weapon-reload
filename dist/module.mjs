@@ -49,11 +49,11 @@ var BaseFeature = class {
 		}
 		return fired;
 	}
-	ammunition(items, equipped = false) {
+	ammunition(items, equipped = false, exclude = []) {
 		return items.filter((item) => {
 			const gameSystem = item.system;
-			if (equipped) return item.type == "consumable" && gameSystem.type.subtype == "firearmBullet" && gameSystem.equipped;
-			return item.type == "consumable" && gameSystem.type.subtype == "firearmBullet";
+			if (equipped) return item.type == "consumable" && gameSystem.type.subtype == "firearmBullet" && gameSystem.equipped && !exclude.includes(item.name);
+			return item.type == "consumable" && gameSystem.type.subtype == "firearmBullet" && !exclude.includes(item.name);
 		});
 	}
 	init() {}
@@ -122,8 +122,8 @@ var ReloadableWeaponAttackFeature = class extends BaseFeature {
 		Hooks.on("dnd5e.postRollConfiguration", this.onUseActivity.bind(this));
 	}
 	onUseActivity(d20Roll, event) {
+		if (!event.hookNames.includes("attack") || event.subject.name !== "Attack") return;
 		if ((d20Roll[0]?.data?.item)?.type?.baseItem !== "reloadableWeapon") return;
-		if (!event.hookNames.includes("attack")) return;
 		console.log("Weapon Reload | Triggered Attack");
 		this.weaponId = event.subject.item.id;
 		this.characterId = event.subject.actor.id;
@@ -354,13 +354,20 @@ var ReloadableWeaponCreationFeature = class extends BaseFeature {
 var ReloadFeature = class extends BaseFeature {
 	_hookId;
 	_handleChoiceDialogClose;
+	_repeaterRound;
 	constructor(featureManager) {
 		super(featureManager);
 		this._hookId = -1;
 		this._handleChoiceDialogClose = false;
+		this._repeaterRound = {};
 	}
 	init() {
 		Hooks.on("dnd5e.preUseActivity", this.onUseActivity.bind(this));
+		Hooks.on("ready", this.getRepeaterAmmo.bind(this));
+	}
+	async getRepeaterAmmo() {
+		const repeater_round_uuid = game.settings.get(this.moduleManager.id, "repeaterRoundUUID");
+		this._repeaterRound = await fromUuid(repeater_round_uuid);
 	}
 	onUseActivity(activity) {
 		if (activity.type === "utility" && activity.name == "Reload") {
@@ -375,7 +382,7 @@ var ReloadFeature = class extends BaseFeature {
 	weaponReload(refundAmmo = true) {
 		const items = this.character?.items;
 		const currentLoadout = this.loadout;
-		const inventoryAmmunition = this.ammunition(items);
+		const inventoryAmmunition = this.ammunition(items, false, [this._repeaterRound.name]);
 		let ammunitionChoices = [];
 		if (refundAmmo) ammunitionChoices = this.refundChamberedAmmo(inventoryAmmunition);
 		else ammunitionChoices = inventoryAmmunition.map((ammo) => {
@@ -538,6 +545,55 @@ var ReloadFeature = class extends BaseFeature {
 };
 
 //#endregion
+//#region src/module/features/RepeatingShotFeature.ts
+var RepeatingShotFeature = class extends BaseFeature {
+	_ammo;
+	constructor(featureManager) {
+		super(featureManager);
+		this._ammo = {};
+	}
+	init() {
+		Hooks.on("dnd5e.postRollConfiguration", this.onUseActivity.bind(this));
+	}
+	onUseActivity(d20Roll, event) {
+		if (!event.hookNames.includes("attack") || event.subject.name !== "Repeating Shot") return;
+		if ((d20Roll[0]?.data?.item)?.type?.baseItem !== "reloadableWeapon") return;
+		console.log("Weapon Reload | Triggered Repeating Shot");
+		this.weaponId = event.subject.item.id;
+		this.characterId = event.subject.actor.id;
+		return this.fireRound();
+	}
+	async fireRound() {
+		await this.loadAmmo();
+		if (!this._ammo) return false;
+		this._ammo.use();
+		return true;
+	}
+	findAmmo(name) {
+		return this.character.items.filter((item) => {
+			const gameSystem = item.system;
+			return item.type == "consumable" && gameSystem.type.subtype == "firearmBullet" && item.name == name;
+		})[0];
+	}
+	hasAmmo(name) {
+		if (this.character.items.filter((item) => {
+			const gameSystem = item.system;
+			return item.type == "consumable" && gameSystem.type.subtype == "firearmBullet" && item.name == name;
+		}).length > 0) return true;
+		return false;
+	}
+	async loadAmmo() {
+		const repeater_round_uuid = game.settings.get(this.moduleManager.id, "repeaterRoundUUID");
+		const compendiumAmmo = await fromUuid(repeater_round_uuid);
+		if (!this.hasAmmo(compendiumAmmo.name)) await this.character.createEmbeddedDocuments("Item", [compendiumAmmo.toObject()]);
+		this._ammo = this.findAmmo(compendiumAmmo.name);
+	}
+	toString() {
+		return "class RepeatingShotFeature";
+	}
+};
+
+//#endregion
 //#region src/module/managers/FeatureManager.ts
 var FeatureManager = class {
 	_moduleManager;
@@ -551,7 +607,8 @@ var FeatureManager = class {
 			nextRound: new NextRoundFeature(this),
 			reload: new ReloadFeature(this),
 			reloadableWeaponAttack: new ReloadableWeaponAttackFeature(this),
-			reloadableWeaponCreation: new ReloadableWeaponCreationFeature(this)
+			reloadableWeaponCreation: new ReloadableWeaponCreationFeature(this),
+			repeatingShot: new RepeatingShotFeature(this)
 		};
 	}
 	getFeature(id$1) {
@@ -683,7 +740,7 @@ var ModuleManager = class {
 			label: this.uiManager.getLocalizedTxt("WEAPON_RELOAD.Unstable"),
 			isPhysical: true
 		};
-		CONFIG.DND5E.weaponIds.reloadableWeapon = "Compendium.fvtt-weapon-reload.item-pack.Item.lE60QaS1sctb3OAd";
+		CONFIG.DND5E.weaponIds.reloadableWeapon = "Compendium.fvtt-weapon-reload.weapon-reload-item-pack.Item.lE60QaS1sctb3OAd";
 	}
 	moduleConfigurations() {
 		const moduleName = "fvtt-weapon-reload";
@@ -719,6 +776,14 @@ var ModuleManager = class {
 			config: true,
 			default: false
 		});
+		game.settings.register(moduleName, "repeaterRoundUUID", {
+			scope: "world",
+			name: "SETTINGS.WEAPON_RELOAD.RepeaterRoundUUID.Name",
+			hint: "SETTINGS.WEAPON_RELOAD.RepeaterRoundUUID.Hint",
+			type: String,
+			config: true,
+			default: "Compendium.fvtt-weapon-reload.weapon-reload-item-pack.Item.GQzRN4amlRZX7k0V"
+		});
 	}
 	debug(hooks = false) {
 		CONFIG.debug.hooks = hooks;
@@ -739,8 +804,11 @@ const MODULE_ID = "fvtt-weapon-reload";
 */
 async function rollDownSettings() {
 	for (const [key, value] of Object.entries({
-		enableFeature: true,
-		colorTheme: "sepia"
+		unstableAmmo: true,
+		unstableAmmoFailureThreshhold: 2,
+		useMisfires: true,
+		filterAmmunitionByEquipped: false,
+		repeaterRoundUUID: "Compendium.fvtt-weapon-reload.weapon-reload-item-pack.Item.GQzRN4amlRZX7k0V"
 	})) {
 		const current = game.settings.get(MODULE_ID, key);
 		if (current === void 0 || current === null) {
@@ -750,7 +818,7 @@ async function rollDownSettings() {
 	}
 }
 /**
-* Optional advanced: watch for system-level setting changes and propagate them.
+* Watch for system-level setting changes and propagate them.
 */
 function listenForSystemChanges() {
 	Hooks.on("updateSetting", async (setting) => {

@@ -54,7 +54,7 @@ export default class ModuleManager {
         };
 
         (CONFIG as any).DND5E.weaponIds.reloadableWeapon =
-            'Compendium.fvtt-weapon-reload.item-pack.Item.lE60QaS1sctb3OAd';
+            'Compendium.fvtt-weapon-reload.weapon-reload-item-pack.Item.lE60QaS1sctb3OAd';
     }
 
     moduleConfigurations() {
@@ -94,6 +94,16 @@ export default class ModuleManager {
             type: Boolean,
             config: true,
             default: false,
+        });
+
+        game.settings.register(moduleName, 'repeaterRoundUUID', {
+            scope: 'world',
+            name: 'SETTINGS.WEAPON_RELOAD.RepeaterRoundUUID.Name',
+            hint: 'SETTINGS.WEAPON_RELOAD.RepeaterRoundUUID.Hint',
+            type: String,
+            config: true,
+            default:
+                'Compendium.fvtt-weapon-reload.weapon-reload-item-pack.Item.GQzRN4amlRZX7k0V',
         });
     }
 

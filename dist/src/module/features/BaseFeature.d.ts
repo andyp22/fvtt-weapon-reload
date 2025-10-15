@@ -16,7 +16,7 @@ export default class BaseFeature {
     get loadout(): string[];
     get fired(): string[];
     getReloadFlag(name: string): string[];
-    ammunition(items: Collection<Item5e>, equipped?: boolean): Item5e[];
+    ammunition(items: Collection<Item5e>, equipped?: boolean, exclude?: string[]): Item5e[];
     init(): void;
     translate(key: string, opts?: {
         [key: string]: string;

@@ -4,6 +4,7 @@ import {
     ReloadableWeaponAttackFeature,
     ReloadableWeaponCreationFeature,
     ReloadFeature,
+    RepeatingShotFeature,
 } from '../features';
 
 export default class FeatureManager {
@@ -21,6 +22,7 @@ export default class FeatureManager {
             reload: new ReloadFeature(this),
             reloadableWeaponAttack: new ReloadableWeaponAttackFeature(this),
             reloadableWeaponCreation: new ReloadableWeaponCreationFeature(this),
+            repeatingShot: new RepeatingShotFeature(this),
         };
     }
 

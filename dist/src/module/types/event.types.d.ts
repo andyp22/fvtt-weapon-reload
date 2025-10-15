@@ -15,6 +15,7 @@ export interface DndAttackEvent {
     subject: {
         _id: string;
         type: string;
+        name: string;
         sort: number;
         activation: {
             type: string;
