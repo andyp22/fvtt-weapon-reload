@@ -1,10 +1,11 @@
 {
     "name": "fvtt-weapon-reload",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Weapon Reload",
     "private": true,
     "scripts": {
-        "build": "npm run clean && npm run prettier:format && npm run rolldown:build && npm run types",
+        "build:dev": "npm run clean && npm run prettier:format && npm run rolldown:build",
+        "build:release": "npm run clean && npm run prettier:format && npm run rolldown:build && npm run types",
         "clean": "rimraf dist",
         "dev:test": "npm run prettier:format && clear && npm run test:watch",
         "prettier:check": "prettier \"**/*.{js,json,md,mdx,ts,tsx,scss,css}\" --check",

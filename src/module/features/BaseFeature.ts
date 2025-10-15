@@ -72,19 +72,25 @@ export default class BaseFeature {
         return fired;
     }
 
-    ammunition(items: Collection<Item5e>, equipped: boolean = false): Item5e[] {
+    ammunition(
+        items: Collection<Item5e>,
+        equipped: boolean = false,
+        exclude: string[] = []
+    ): Item5e[] {
         return items.filter((item: Item5e) => {
             const gameSystem = (item as DndItem5e).system;
             if (equipped) {
                 return (
                     item.type == 'consumable' &&
                     gameSystem.type.subtype == 'firearmBullet' &&
-                    gameSystem.equipped
+                    gameSystem.equipped &&
+                    !exclude.includes(item.name)
                 );
             }
             return (
                 item.type == 'consumable' &&
-                gameSystem.type.subtype == 'firearmBullet'
+                gameSystem.type.subtype == 'firearmBullet' &&
+                !exclude.includes(item.name)
             );
         });
     }

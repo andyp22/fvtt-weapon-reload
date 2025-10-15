@@ -4,8 +4,10 @@ import { type AmmoItemOption, DndItem5e } from '../types';
 export declare class ReloadFeature extends BaseFeature {
     private _hookId;
     private _handleChoiceDialogClose;
+    private _repeaterRound;
     constructor(featureManager: FeatureManager);
     init(): void;
+    getRepeaterAmmo(): Promise<void>;
     onUseActivity(activity: any): boolean;
     weaponReload(refundAmmo?: boolean): void;
     refundChamberedAmmo(inventoryAmmunition: DndItem5e[]): AmmoItemOption[];

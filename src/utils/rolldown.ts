@@ -4,10 +4,13 @@ const MODULE_ID = 'fvtt-weapon-reload';
  * Typically called on `ready`.
  */
 export async function rollDownSettings(): Promise<void> {
-    // Pretend we have a global defaults object (could also come from a compendium or system setting)
     const globalDefaults = {
-        enableFeature: true,
-        colorTheme: 'sepia',
+        unstableAmmo: true,
+        unstableAmmoFailureThreshhold: 2,
+        useMisfires: true,
+        filterAmmunitionByEquipped: false,
+        repeaterRoundUUID:
+            'Compendium.fvtt-weapon-reload.weapon-reload-item-pack.Item.GQzRN4amlRZX7k0V',
     };
 
     for (const [key, value] of Object.entries(globalDefaults)) {
@@ -22,7 +25,7 @@ export async function rollDownSettings(): Promise<void> {
 }
 
 /**
- * Optional advanced: watch for system-level setting changes and propagate them.
+ * Watch for system-level setting changes and propagate them.
  */
 export function listenForSystemChanges(): void {
     Hooks.on('updateSetting', async (setting: any) => {

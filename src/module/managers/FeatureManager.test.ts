@@ -5,6 +5,7 @@ import {
     ReloadFeature,
     ReloadableWeaponAttackFeature,
     ReloadableWeaponCreationFeature,
+    RepeatingShotFeature,
 } from '../features';
 import { jest } from '@jest/globals';
 
@@ -17,6 +18,9 @@ jest.mock('../features', () => ({
     ReloadableWeaponCreationFeature: jest
         .fn()
         .mockImplementation(() => ({ id: 'reloadableWeaponCreation' })),
+    RepeatingShotFeature: jest
+        .fn()
+        .mockImplementation(() => ({ id: 'repeatingShot' })),
 }));
 
 let moduleManager: ModuleManager;
@@ -49,6 +53,7 @@ describe('FeatureManager.init()', () => {
         expect(ReloadableWeaponCreationFeature).toHaveBeenCalledWith(
             featureManager
         );
+        expect(RepeatingShotFeature).toHaveBeenCalledWith(featureManager);
 
         expect(featureManager['_features']).not.toBeUndefined;
         expect(Object.keys(featureManager['_features'])).toEqual([
@@ -56,6 +61,7 @@ describe('FeatureManager.init()', () => {
             'reload',
             'reloadableWeaponAttack',
             'reloadableWeaponCreation',
+            'repeatingShot',
         ]);
     });
 });

@@ -47,6 +47,10 @@
                 "Name": "Filter Ammunition By Equipped",
                 "Hint": "A flag to indicate whether filtering of ammunition should include checking to see if it is also equipped."
             },
+            "RepeaterRoundUUID": {
+                "Name": "Repeating Shot Ammunition UUID",
+                "Hint": "The UUID of a consumable firearm bullet that will be used as ammunition for Repeating Shot"
+            },
             "UseMisfires": {
                 "Name": "Enable Misfires",
                 "Hint": "A flag to indicate whether the optional rule for using misfiring weapons is enabled."
