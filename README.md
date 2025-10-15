@@ -100,7 +100,6 @@ The Repeating Shot feature is a named `Attack Activity` meant to be used in plac
 
 **Note:** Any ammunition that shares the same name as the configured `Repeating Shot Ammunition UUID` will be excluded from user's reload options, even if they have it equipped and in their inventory.
 
-
 ## Compendiums
 
 The following compendiums are provided:
