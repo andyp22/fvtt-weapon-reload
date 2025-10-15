@@ -6,15 +6,28 @@ import { type AmmoItemOption, DndItem5e } from '../types';
 export class ReloadFeature extends BaseFeature {
     private _hookId: number;
     private _handleChoiceDialogClose: boolean;
+    private _repeaterRound: DndItem5e;
 
     constructor(featureManager: FeatureManager) {
         super(featureManager);
         this._hookId = -1;
         this._handleChoiceDialogClose = false;
+        this._repeaterRound = {} as DndItem5e;
     }
 
     init() {
         Hooks.on('dnd5e.preUseActivity', this.onUseActivity.bind(this));
+        Hooks.on('ready', this.getRepeaterAmmo.bind(this));
+    }
+
+    async getRepeaterAmmo() {
+        const repeater_round_uuid = game.settings.get(
+            this.moduleManager.id,
+            'repeaterRoundUUID'
+        );
+        this._repeaterRound = (await fromUuid(
+            repeater_round_uuid
+        )) as unknown as DndItem5e;
     }
 
     onUseActivity(activity: any) {
@@ -32,7 +45,9 @@ export class ReloadFeature extends BaseFeature {
     weaponReload(refundAmmo: boolean = true) {
         const items = this.character?.items;
         const currentLoadout = this.loadout;
-        const inventoryAmmunition = this.ammunition(items) as DndItem5e[];
+        const inventoryAmmunition = this.ammunition(items, false, [
+            this._repeaterRound.name,
+        ]) as DndItem5e[];
         let ammunitionChoices: AmmoItemOption[] = [];
 
         if (refundAmmo) {
