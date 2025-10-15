@@ -18,7 +18,9 @@ jest.mock('../features', () => ({
     ReloadableWeaponCreationFeature: jest
         .fn()
         .mockImplementation(() => ({ id: 'reloadableWeaponCreation' })),
-    RepeatingShotFeature: jest.fn().mockImplementation(() => ({ id: 'repeatingShot' })),
+    RepeatingShotFeature: jest
+        .fn()
+        .mockImplementation(() => ({ id: 'repeatingShot' })),
 }));
 
 let moduleManager: ModuleManager;
@@ -51,9 +53,7 @@ describe('FeatureManager.init()', () => {
         expect(ReloadableWeaponCreationFeature).toHaveBeenCalledWith(
             featureManager
         );
-        expect(RepeatingShotFeature).toHaveBeenCalledWith(
-            featureManager
-        );
+        expect(RepeatingShotFeature).toHaveBeenCalledWith(featureManager);
 
         expect(featureManager['_features']).not.toBeUndefined;
         expect(Object.keys(featureManager['_features'])).toEqual([

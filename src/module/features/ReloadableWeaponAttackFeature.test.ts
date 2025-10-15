@@ -63,7 +63,11 @@ describe('ReloadableWeaponAttackFeature.onUseActivity()', () => {
         };
         const event = {
             hookNames: ['attack'],
-            subject: { item: { id: 'item123' }, actor: { id: 'actor456' }, name: 'Attack' },
+            subject: {
+                item: { id: 'item123' },
+                actor: { id: 'actor456' },
+                name: 'Attack',
+            },
         };
 
         const mockReloadCall = jest.fn();
@@ -86,7 +90,11 @@ describe('ReloadableWeaponAttackFeature.onUseActivity()', () => {
         };
         const event = {
             hookNames: ['attack'],
-            subject: { item: { id: 'itm' }, actor: { id: 'act' }, name: 'Attack' },
+            subject: {
+                item: { id: 'itm' },
+                actor: { id: 'act' },
+                name: 'Attack',
+            },
         };
 
         feature.reloadableWeaponAttack = jest.fn();
@@ -567,8 +575,10 @@ describe('ReloadableWeaponAttackFeature.onClickMisfire()', () => {
 
         RollMock = jest.fn().mockImplementation(() => {
             rollInstance = {
-                roll: jest.fn().mockImplementation(function (this: any): Promise<any> {
-                    return Promise.resolve((this));
+                roll: jest.fn().mockImplementation(function (
+                    this: any
+                ): Promise<any> {
+                    return Promise.resolve(this);
                 }),
                 toMessage: jest.fn().mockResolvedValue(undefined),
             };
