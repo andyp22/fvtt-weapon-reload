@@ -128,6 +128,58 @@ describe('BaseFeature.ammunition()', () => {
         expect(result).toHaveLength(1);
         expect(result[0].system.equipped).toBe(true);
     });
+
+    test('excludes reserved ammunition', () => {
+        const items: any[] = [
+            {
+                type: 'consumable',
+                name: 'Item 1',
+                system: { type: { subtype: 'firearmBullet' }, equipped: true },
+            },
+            {
+                type: 'consumable',
+                name: 'Item 2',
+                system: { type: { subtype: 'firearmBullet' }, equipped: false },
+            },
+            {
+                type: 'consumable',
+                name: 'Item 3',
+                system: { type: { subtype: 'firearmBullet' }, equipped: false },
+            },
+        ];
+        const result = feature.ammunition(items as any, false, [
+            'Item 3',
+        ]) as DndItem5e[];
+        expect(result).toHaveLength(2);
+        expect(result[0].system.equipped).toBe(true);
+        expect(result[1].system.equipped).toBe(false);
+    });
+
+    test('excludes reserved ammunition, even if equipped', () => {
+        const items: any[] = [
+            {
+                type: 'consumable',
+                name: 'Item 1',
+                system: { type: { subtype: 'firearmBullet' }, equipped: true },
+            },
+            {
+                type: 'consumable',
+                name: 'Item 2',
+                system: { type: { subtype: 'firearmBullet' }, equipped: true },
+            },
+            {
+                type: 'consumable',
+                name: 'Item 3',
+                system: { type: { subtype: 'firearmBullet' }, equipped: true },
+            },
+        ];
+        const result = feature.ammunition(items as any, true, [
+            'Item 3',
+        ]) as DndItem5e[];
+        expect(result).toHaveLength(2);
+        expect(result[0].system.equipped).toBe(true);
+        expect(result[1].system.equipped).toBe(true);
+    });
 });
 
 describe('BaseFeature.translate()', () => {
