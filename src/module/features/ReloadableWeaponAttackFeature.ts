@@ -27,12 +27,16 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
     }
 
     onUseActivity(d20Roll: DndD20Roll[], event: DndAttackEvent) {
+        // If this isn't an attack we need to break out or too many rounds will be consumed
+        if (
+            !event.hookNames.includes('attack') ||
+            event.subject.name !== 'Attack'
+        )
+            return;
+
         const roll = d20Roll[0];
         const weaponData = roll?.data?.item;
         if (weaponData?.type?.baseItem !== 'reloadableWeapon') return;
-
-        // If this isn't an attack we need to break out or too many rounds will be consumed
-        if (!event.hookNames.includes('attack')) return;
 
         console.log('Weapon Reload | Triggered Attack');
         this.weaponId = event.subject.item.id;
