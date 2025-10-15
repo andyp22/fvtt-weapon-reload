@@ -63,7 +63,7 @@ describe('ReloadableWeaponAttackFeature.onUseActivity()', () => {
         };
         const event = {
             hookNames: ['attack'],
-            subject: { item: { id: 'item123' }, actor: { id: 'actor456' } },
+            subject: { item: { id: 'item123' }, actor: { id: 'actor456' }, name: 'Attack' },
         };
 
         const mockReloadCall = jest.fn();
@@ -86,7 +86,7 @@ describe('ReloadableWeaponAttackFeature.onUseActivity()', () => {
         };
         const event = {
             hookNames: ['attack'],
-            subject: { item: { id: 'itm' }, actor: { id: 'act' } },
+            subject: { item: { id: 'itm' }, actor: { id: 'act' }, name: 'Attack' },
         };
 
         feature.reloadableWeaponAttack = jest.fn();
@@ -169,7 +169,7 @@ describe('ReloadableWeaponAttackFeature.onRenderChatMessage()', () => {
     test('calls Hooks.off when message matches _nextRound', async () => {
         await feature.onRenderChatMessage(message, html);
 
-        expect(Hooks.off).toHaveBeenCalledWith(
+        expect((global as any).Hooks.off).toHaveBeenCalledWith(
             'dnd5e.renderChatMessage',
             (feature as any)._hookId
         );
@@ -246,12 +246,12 @@ describe('ReloadableWeaponAttackFeature.getNextRound()', () => {
             name: 'Round 1',
             id: 'ammo1',
             use: jest.fn(),
-        } as any as Item5e;
+        } as any as DndItem5e;
         const ammo2 = {
             name: 'Round 2',
             id: 'ammo2',
             use: jest.fn(),
-        } as any as Item5e;
+        } as any as DndItem5e;
         feature.ammunition = jest.fn(() => [ammo1, ammo2]);
 
         // Act
@@ -515,7 +515,10 @@ describe('ReloadableWeaponAttackFeature.onClickRefund()', () => {
         });
 
         // Mock ammunition list
-        const ammoItem = { name: 'Round 1', img: 'bullet.png' } as DndItem5e;
+        const ammoItem = {
+            name: 'Round 1',
+            img: 'bullet.png',
+        } as unknown as DndItem5e;
         feature.ammunition = jest.fn(() => [ammoItem]);
 
         await feature.onClickRefund();
@@ -543,7 +546,8 @@ describe('ReloadableWeaponAttackFeature.onClickRefund()', () => {
         // Chat message rendered and sent
         const uiManager = feature.moduleManager.uiManager;
         expect(
-            (foundry.applications as any).handlebars.renderTemplate
+            ((global as any).foundry.applications as any).handlebars
+                .renderTemplate
         ).toHaveBeenCalled();
         expect(uiManager.sendChat).toHaveBeenCalledWith(
             actor,
@@ -559,12 +563,12 @@ describe('ReloadableWeaponAttackFeature.onClickMisfire()', () => {
     beforeEach(() => {
         jest.spyOn(feature, 'character', 'get').mockReturnValue({
             name: 'Shooter',
-        } as any as Actor5e);
+        } as any);
 
         RollMock = jest.fn().mockImplementation(() => {
             rollInstance = {
-                roll: jest.fn().mockImplementation(function () {
-                    return Promise.resolve(this);
+                roll: jest.fn().mockImplementation(function (this: any): Promise<any> {
+                    return Promise.resolve((this));
                 }),
                 toMessage: jest.fn().mockResolvedValue(undefined),
             };

@@ -86,7 +86,7 @@ describe('ModuleManager', () => {
     test('moduleConfigurations(): registers expected settings', () => {
         moduleManager.moduleConfigurations();
         const register = (global as any).game.settings.register;
-        expect(register).toHaveBeenCalledTimes(4);
+        expect(register).toHaveBeenCalledTimes(5);
         expect(register).toHaveBeenCalledWith(
             'fvtt-weapon-reload',
             'unstableAmmo',
@@ -103,9 +103,12 @@ describe('ModuleManager', () => {
     test('debug(): toggles CONFIG.debug.hooks and logs', () => {
         const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
         moduleManager.debug(true);
-        expect(CONFIG.debug.hooks).toBe(true);
-        expect(logSpy).toHaveBeenCalledWith('CONFIG: ', CONFIG);
-        expect(logSpy).toHaveBeenCalledWith('CONFIG.DND5E: ', CONFIG.DND5E);
+        expect((global as any).CONFIG.debug.hooks).toBe(true);
+        expect(logSpy).toHaveBeenCalledWith('CONFIG: ', (global as any).CONFIG);
+        expect(logSpy).toHaveBeenCalledWith(
+            'CONFIG.DND5E: ',
+            (global as any).CONFIG.DND5E
+        );
         logSpy.mockRestore();
     });
 
