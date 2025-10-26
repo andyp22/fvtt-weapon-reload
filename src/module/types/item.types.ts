@@ -1,6 +1,6 @@
 import { ConsumableData } from './shared.types';
 
-export type AmmoItemOption = {
+export interface AmmoItemOption {
     name: string;
     value: string;
     count: number;

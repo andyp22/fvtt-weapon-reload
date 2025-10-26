@@ -1,4 +1,4 @@
-export type DialogOptions = {
+export interface DialogOptions {
     title: string;
     contentClasses?: string[];
     content: string;
