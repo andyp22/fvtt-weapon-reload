@@ -145,7 +145,7 @@ export interface ConsumableData {
         rounding: string;
     };
     flags: {
-        dnd5e: { [key: string]: any };
+        dnd5e: Record<string, any>;
     };
     name: string;
 }

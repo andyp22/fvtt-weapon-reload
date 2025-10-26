@@ -9,7 +9,7 @@ import {
 
 export default class FeatureManager {
     private _moduleManager: ModuleManager;
-    private _features: { [key: string]: any };
+    private _features: Record<string, any>;
 
     constructor(moduleManager: ModuleManager) {
         this._moduleManager = moduleManager;

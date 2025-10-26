@@ -107,7 +107,7 @@ export default class ModuleManager {
         });
     }
 
-    debug(hooks: boolean = false) {
+    debug(hooks = false) {
         CONFIG.debug.hooks = hooks;
         console.log('CONFIG: ', CONFIG);
         console.log('CONFIG.DND5E: ', (CONFIG as any).DND5E);

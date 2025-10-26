@@ -74,7 +74,7 @@ export default class BaseFeature {
 
     ammunition(
         items: Collection<Item5e>,
-        equipped: boolean = false,
+        equipped = false,
         exclude: string[] = []
     ): Item5e[] {
         return items.filter((item: Item5e) => {
@@ -97,7 +97,7 @@ export default class BaseFeature {
 
     init() {}
 
-    translate(key: string, opts?: { [key: string]: string }, format?: boolean) {
+    translate(key: string, opts?: Record<string, string>, format?: boolean) {
         return this.moduleManager.uiManager.getLocalizedTxt(key, opts, format);
     }
 

@@ -42,7 +42,7 @@ export class ReloadFeature extends BaseFeature {
         return true;
     }
 
-    weaponReload(refundAmmo: boolean = true) {
+    weaponReload(refundAmmo = true) {
         const items = this.character?.items;
         const currentLoadout = this.loadout;
         const inventoryAmmunition = this.ammunition(items, false, [
@@ -238,7 +238,7 @@ export class ReloadFeature extends BaseFeature {
 
     async reloadReloadableWeapon(
         loadout: string[],
-        reloadCanceled: boolean = false
+        reloadCanceled = false
     ) {
         const reloadableWeapon = this.weapon;
         const ammoCounts = this.getLoadoutCounts(loadout);
@@ -296,7 +296,7 @@ export class ReloadFeature extends BaseFeature {
         return;
     }
 
-    removeLoadout(counts: { [key: string]: number }): boolean {
+    removeLoadout(counts: Record<string, number>): boolean {
         let ammunitionAvailable = true;
         const inventoryAmmunition = this.ammunition(
             this.character?.items
@@ -340,10 +340,8 @@ export class ReloadFeature extends BaseFeature {
         this.weaponReload();
     }
 
-    getLoadoutCounts(currentLoadout: string[]): {
-        [key: string]: number;
-    } {
-        const loadout: { [key: string]: number } = {};
+    getLoadoutCounts(currentLoadout: string[]): Record<string, number> {
+        const loadout: Record<string, number> = {};
         currentLoadout.forEach((ammo: string) => {
             if (!loadout[ammo]) loadout[ammo] = 0;
             loadout[ammo] = loadout[ammo] + 1;

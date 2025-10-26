@@ -25,7 +25,7 @@ export default class UiManager {
         });
     }
 
-    uiNotification(msg: string, type: string = 'info') {
+    uiNotification(msg: string, type = 'info') {
         if (ui.notifications) {
             switch (type) {
                 case 'error':
@@ -62,8 +62,8 @@ export default class UiManager {
 
     getLocalizedTxt(
         key: string,
-        opts?: { [key: string]: string },
-        format: boolean = false
+        opts?: Record<string, string>,
+        format = false
     ) {
         if (format) {
             return (game as any).i18n.format(key, opts);

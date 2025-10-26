@@ -18,7 +18,7 @@ export interface DndItem5e extends Item5e {
         properties?: string[];
         recovery?: string;
     };
-    update: (obj: { [key: string]: any }) => Promise<this>;
+    update: (obj: Record<string, any>) => Promise<this>;
     use: (config?: object, dialog?: object, message?: object) => void;
     getFlag: (moduleId: string, name: string) => any;
     setFlag: (moduleId: string, name: string, value: any) => Promise<this>;
