@@ -5,10 +5,9 @@
     "private": true,
     "scripts": {
         "build:dev": "npm run clean && npm run prettier:format && npm run rolldown:build",
-        "build:release": "npm run clean && npm run prettier:format && npm run rolldown:build && npm run types",
+        "build:release": "npm run build:dev && npm run types",
         "clean": "rimraf dist",
         "dev:test": "npm run prettier:format && clear && npm run test:watch",
-        "lint:fix": "npx eslint -c configs/eslint.config.mjs ./src --fix",
         "lint:scan": "npx eslint -c configs/eslint.config.mjs ./src",
         "prettier:check": "prettier \"**/*.{js,json,md,mdx,ts,tsx,scss,css}\" --check",
         "prettier:format": "prettier \"**/*.{js,json,md,mdx,ts,tsx,scss,css}\" --write --list-different --no-error-on-unmatched-pattern",
@@ -17,7 +16,7 @@
         "test": "jest --detectOpenHandles --runInBand --json --outputFile=jest.results.json",
         "test:watch": "jest --detectOpenHandles --runInBand --watch",
         "types": "tsc --emitDeclarationOnly --project ./configs/tsconfig.types.json",
-        "validate": "npm run clean && npm run prettier:format && npm run lint:scan && npm test && npm run build:release"
+        "validate": "npm run lint:scan && npm test && npm run build:release"
     },
     "repository": {},
     "author": "andyp22",
