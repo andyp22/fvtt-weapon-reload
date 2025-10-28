@@ -1,5 +1,5 @@
 import { NextRoundFeature } from './NextRoundFeature';
-import { moduleMocks } from '../../../tests/mocks/moduleMocks';
+import { moduleMocks } from '../../../tests/mocks/module-mocks';
 import { jest } from '@jest/globals';
 import { UtilityActivity } from '../types';
 

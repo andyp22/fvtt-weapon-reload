@@ -1,6 +1,6 @@
 import BaseFeature from './BaseFeature';
 import { jest } from '@jest/globals';
-import { moduleMocks, MODULE_ID } from '../../../tests/mocks/moduleMocks';
+import { moduleMocks, MODULE_ID } from '../../../tests/mocks/module-mocks';
 import { DndItem5e } from '../types';
 
 let feature: BaseFeature;

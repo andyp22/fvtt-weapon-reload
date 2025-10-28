@@ -1,5 +1,5 @@
 import { ReloadFeature } from './ReloadFeature';
-import { moduleMocks } from '../../../tests/mocks/moduleMocks';
+import { moduleMocks } from '../../../tests/mocks/module-mocks';
 import { jest } from '@jest/globals';
 import { DndItem5e, UtilityActivity } from '../types';
 
