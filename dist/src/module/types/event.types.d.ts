@@ -1,4 +1,4 @@
-import { DndItem5e } from './item.types';
+import { ConsumableDataSubject } from './shared.types';
 export interface DndAttackEvent {
     attackMode: string;
     event: {
@@ -12,59 +12,5 @@ export interface DndAttackEvent {
             advantageMode: number;
         };
     }[];
-    subject: {
-        _id: string;
-        type: string;
-        name: string;
-        sort: number;
-        activation: {
-            type: string;
-            override: boolean;
-        };
-        consumption: {
-            scaling: {
-                allowed: boolean;
-            };
-            spellSlot: boolean;
-            targets: never[];
-        };
-        description: {};
-        duration: {
-            units: string;
-            concentration: boolean;
-            override: boolean;
-        };
-        effects: never[];
-        range: {
-            units: string;
-            override: boolean;
-        };
-        target: {
-            template: {
-                contiguous: boolean;
-                units: string;
-            };
-            affects: {
-                choice: boolean;
-            };
-            override: boolean;
-            prompt: boolean;
-        };
-        uses: {
-            spent: number;
-            recovery: never[];
-        };
-        attack: {
-            critical: {};
-            flat: boolean;
-            type: {};
-        };
-        damage: {
-            critical: {};
-            includeBase: boolean;
-            parts: never[];
-        };
-        actor: Actor5e;
-        item: DndItem5e;
-    };
+    subject: ConsumableDataSubject;
 }

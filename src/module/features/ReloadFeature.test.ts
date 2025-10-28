@@ -1,7 +1,7 @@
 import { ReloadFeature } from './ReloadFeature';
 import { moduleMocks } from '../../../tests/mocks/moduleMocks';
 import { jest } from '@jest/globals';
-import { DndItem5e } from '../types';
+import { DndItem5e, UtilityActivity } from '../types';
 
 let feature: ReloadFeature;
 
@@ -27,7 +27,7 @@ describe('ReloadFeature.onUseActivity()', () => {
             name: 'Shoot',
             actor: { id: 'a1' },
             item: { id: 'w1' },
-        });
+        } as unknown as UtilityActivity);
         expect(result).toBe(true);
     });
 
@@ -42,7 +42,7 @@ describe('ReloadFeature.onUseActivity()', () => {
             name: 'Reload',
             actor: { id: 'a1' },
             item: { id: 'w1' },
-        });
+        } as unknown as UtilityActivity);
 
         expect(logSpy).toHaveBeenCalledWith('Weapon Reload | Triggered Reload');
         expect(feature.characterId).toBe('a1');

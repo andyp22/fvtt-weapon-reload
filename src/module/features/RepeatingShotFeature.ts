@@ -79,8 +79,8 @@ export class RepeatingShotFeature extends BaseFeature {
         )) as unknown as DndItem5e;
 
         if (!this.hasAmmo(compendiumAmmo.name)) {
-            await (this.character as any).createEmbeddedDocuments('Item', [
-                (compendiumAmmo as any).toObject(),
+            await this.character.createEmbeddedDocuments('Item', [
+                compendiumAmmo.toObject(),
             ]);
         }
 

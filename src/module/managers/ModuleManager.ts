@@ -2,6 +2,8 @@ import FeatureManager from './FeatureManager';
 import UiManager from './UiManager';
 import TemplateManager from './TemplateManager';
 
+import { type FOUNDRY_CONFIGS } from '../types';
+
 export default class ModuleManager {
     private _moduleId: string;
     private _featureManager: FeatureManager;
@@ -39,21 +41,23 @@ export default class ModuleManager {
     }
 
     systemOverrides() {
-        (CONFIG as any).DND5E.featureTypes.item = {
+        (CONFIG as FOUNDRY_CONFIGS).DND5E.featureTypes.item = {
             label: this.uiManager.getLocalizedTxt('WEAPON_RELOAD.ItemFeature'),
         };
 
-        (CONFIG as any).DND5E.itemProperties.concealable = {
+        (CONFIG as FOUNDRY_CONFIGS).DND5E.itemProperties.concealable = {
             label: this.uiManager.getLocalizedTxt('WEAPON_RELOAD.Concealable'),
         };
-        (CONFIG as any).DND5E.validProperties.weapon.add('concealable');
+        (CONFIG as FOUNDRY_CONFIGS).DND5E.validProperties.weapon.add(
+            'concealable'
+        );
 
-        (CONFIG as any).DND5E.itemProperties.unstable = {
+        (CONFIG as FOUNDRY_CONFIGS).DND5E.itemProperties.unstable = {
             label: this.uiManager.getLocalizedTxt('WEAPON_RELOAD.Unstable'),
             isPhysical: true,
         };
 
-        (CONFIG as any).DND5E.weaponIds.reloadableWeapon =
+        (CONFIG as FOUNDRY_CONFIGS).DND5E.weaponIds.reloadableWeapon =
             'Compendium.fvtt-weapon-reload.weapon-reload-item-pack.Item.lE60QaS1sctb3OAd';
     }
 
@@ -110,7 +114,7 @@ export default class ModuleManager {
     debug(hooks = false) {
         CONFIG.debug.hooks = hooks;
         console.log('CONFIG: ', CONFIG);
-        console.log('CONFIG.DND5E: ', (CONFIG as any).DND5E);
+        console.log('CONFIG.DND5E: ', (CONFIG as FOUNDRY_CONFIGS).DND5E);
     }
 
     toString() {

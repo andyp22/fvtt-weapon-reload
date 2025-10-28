@@ -5,7 +5,7 @@ export interface AmmoItemOption {
     value: string;
     count: number;
     equipped: boolean;
-};
+}
 
 export interface DndItem5e extends Item5e {
     id: string;
@@ -18,8 +18,9 @@ export interface DndItem5e extends Item5e {
         properties?: string[];
         recovery?: string;
     };
-    update: (obj: Record<string, any>) => Promise<this>;
+    update: (obj: Record<string, unknown>) => Promise<this>;
     use: (config?: object, dialog?: object, message?: object) => void;
-    getFlag: (moduleId: string, name: string) => any;
-    setFlag: (moduleId: string, name: string, value: any) => Promise<this>;
+    getFlag: (moduleId: string, name: string) => unknown;
+    setFlag: (moduleId: string, name: string, value: unknown) => Promise<this>;
+    toObject: () => void;
 }

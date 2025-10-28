@@ -23,5 +23,5 @@ export interface ActivityCardChatType {
 }
 
 export interface ChatMessage5e extends ChatMessage {
-    flags: Record<string, any>;
+    flags: Record<string, Record<string, Record<string, string>>>;
 }

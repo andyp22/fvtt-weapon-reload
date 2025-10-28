@@ -1,6 +1,7 @@
 import { NextRoundFeature } from './NextRoundFeature';
 import { moduleMocks } from '../../../tests/mocks/moduleMocks';
 import { jest } from '@jest/globals';
+import { UtilityActivity } from '../types';
 
 let feature: NextRoundFeature;
 
@@ -27,7 +28,7 @@ describe('NextRoundFeature.onUseActivity()', () => {
             name: 'Fire Shot',
             actor: { id: 'actor1' },
             item: { id: 'weapon1' },
-        });
+        } as unknown as UtilityActivity);
 
         expect(result).toBe(true);
     });
@@ -46,7 +47,7 @@ describe('NextRoundFeature.onUseActivity()', () => {
             name: 'Next Round',
             actor: { id: 'actor123' },
             item: { id: 'weapon456' },
-        };
+        } as unknown as UtilityActivity;
 
         const result = feature.onUseActivity(activity);
 

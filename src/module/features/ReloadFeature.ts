@@ -1,7 +1,12 @@
 import DialogV2 from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client-esm/applications/api/dialog.mjs';
 import FeatureManager from '../managers/FeatureManager';
 import BaseFeature from './BaseFeature';
-import { type AmmoItemOption, DndItem5e } from '../types';
+import {
+    AmmoItemOption,
+    DndItem5e,
+    type foundryApplications,
+    UtilityActivity,
+} from '../types';
 
 export class ReloadFeature extends BaseFeature {
     private _hookId: number;
@@ -30,7 +35,7 @@ export class ReloadFeature extends BaseFeature {
         )) as unknown as DndItem5e;
     }
 
-    onUseActivity(activity: any) {
+    onUseActivity(activity: UtilityActivity) {
         if (activity.type === 'utility' && activity.name == 'Reload') {
             console.log('Weapon Reload | Triggered Reload');
 
@@ -108,13 +113,11 @@ export class ReloadFeature extends BaseFeature {
         return availableAmmunition;
     }
 
-    onSubmitChooseAmmunition({
-        loadout,
-        reloadCanceled,
-    }: {
-        loadout: string[];
-        reloadCanceled: boolean;
-    }): Promise<void> {
+    onSubmitChooseAmmunition(data: unknown): Promise<void> {
+        const { loadout, reloadCanceled } = data as {
+            loadout: string[];
+            reloadCanceled: boolean;
+        };
         return this.reloadReloadableWeapon(loadout, reloadCanceled);
     }
 
@@ -123,7 +126,7 @@ export class ReloadFeature extends BaseFeature {
         currentLoadout: string[]
     ) {
         const dialogContent = await (
-            foundry.applications as any
+            foundry.applications as foundryApplications
         ).handlebars.renderTemplate(
             'modules/fvtt-weapon-reload/templates/ammoSelectionDialogTemplate.hbs',
             {
@@ -212,7 +215,9 @@ export class ReloadFeature extends BaseFeature {
         reloadCanceled: boolean,
         loadout: string[]
     ) {
-        return await (foundry.applications as any).handlebars.renderTemplate(
+        return await (
+            foundry.applications as foundryApplications
+        ).handlebars.renderTemplate(
             'modules/fvtt-weapon-reload/templates/reloadableWeaponReloadTemplate.hbs',
             {
                 item: {
@@ -236,10 +241,7 @@ export class ReloadFeature extends BaseFeature {
         );
     }
 
-    async reloadReloadableWeapon(
-        loadout: string[],
-        reloadCanceled = false
-    ) {
+    async reloadReloadableWeapon(loadout: string[], reloadCanceled = false) {
         const reloadableWeapon = this.weapon;
         const ammoCounts = this.getLoadoutCounts(loadout);
         const canceledLoadout = new Array(this.weapon.system.uses.max).fill(

@@ -28,14 +28,19 @@ export async function rollDownSettings(): Promise<void> {
  * Watch for system-level setting changes and propagate them.
  */
 export function listenForSystemChanges(): void {
-    Hooks.on('updateSetting', async (setting: any) => {
-        if (
-            setting.key?.startsWith('system.') &&
-            setting.key.includes(MODULE_ID)
-        ) {
-            const [, , key] = setting.key.split('.');
-            console.log(`[${MODULE_ID}] Detected system-level change: ${key}`);
-            await game.settings.set(MODULE_ID, key, setting.value);
+    Hooks.on(
+        'updateSetting',
+        async (setting: { key: string; value: unknown }) => {
+            if (
+                setting.key?.startsWith('system.') &&
+                setting.key.includes(MODULE_ID)
+            ) {
+                const [, , key] = setting.key.split('.');
+                console.log(
+                    `[${MODULE_ID}] Detected system-level change: ${key}`
+                );
+                await game.settings.set(MODULE_ID, key, setting.value);
+            }
         }
-    });
+    );
 }

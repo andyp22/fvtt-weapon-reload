@@ -1,5 +1,5 @@
 import ModuleManager from './ModuleManager';
-import { type DialogOptions } from '../types';
+import { DialogOptions, type foundryGame } from '../types';
 
 export default class UiManager {
     private _moduleManager: ModuleManager;
@@ -66,9 +66,9 @@ export default class UiManager {
         format = false
     ) {
         if (format) {
-            return (game as any).i18n.format(key, opts);
+            return (game as foundryGame).i18n.format(key, opts);
         }
-        return (game as any).i18n.localize(key, opts);
+        return (game as foundryGame).i18n.localize(key, opts);
     }
 
     toString() {

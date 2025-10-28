@@ -1,13 +1,13 @@
-export default class TemplateManager {
-    constructor() {}
+import { foundryApplications } from '../types';
 
+export default class TemplateManager {
     init() {
-        (foundry.applications as any).handlebars.loadTemplates(
+        (foundry.applications as foundryApplications).handlebars.loadTemplates(
             TemplateManager.paths
         );
     }
 
-    static get paths() {
+    static get paths(): Record<string, string> {
         const paths: Record<string, string> = {};
         const templatePaths = '__ALL_TEMPLATES__'.split(',');
         for (const path of templatePaths) {
@@ -21,11 +21,11 @@ export default class TemplateManager {
             if (
                 Object.prototype.hasOwnProperty.call(_templateCache, template)
             ) {
-                delete _templateCache[template];
+                Reflect.deleteProperty(_templateCache, template);
             }
         }
 
-        (foundry.applications as any).handlebars
+        (foundry.applications as foundryApplications).handlebars
             .loadTemplates(this.paths)
             .then(() => {
                 for (const application in ui.windows) {

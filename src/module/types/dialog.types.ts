@@ -8,7 +8,7 @@ export interface DialogOptions {
         callback: (
             event: PointerEvent | SubmitEvent,
             button: HTMLButtonElement
-        ) => any;
+        ) => unknown;
     }[];
-    onSubmit: (data: any) => Promise<void>;
-};
+    onSubmit: (data: unknown) => Promise<void>;
+}

@@ -1,60 +1,72 @@
 import { DndItem5e } from './item.types';
 
-export interface ConsumableData {
-    activities: {
-        _id: string;
+export interface ConsumableDataSubject {
+    _id: string;
+    name: string;
+    type: string;
+    sort: number;
+    activation: {
         type: string;
-        sort: number;
-        activation: {
-            type: string;
-            override: boolean;
+        override: boolean;
+    };
+    consumption: {
+        scaling: {
+            allowed: boolean;
         };
-        consumption: {
-            scaling: {
-                allowed: boolean;
-            };
-            spellSlot: boolean;
-            targets: never[];
-        };
-        description: {};
-        duration: {
+        spellSlot: boolean;
+        targets: never[];
+    };
+    description: {
+        chatFlavor: string;
+    };
+    duration: {
+        units: string;
+        concentration: boolean;
+        override: boolean;
+    };
+    effects: never[];
+    range: {
+        units: string;
+        override: boolean;
+    };
+    target: {
+        template: {
+            contiguous: boolean;
             units: string;
-            concentration: boolean;
-            override: boolean;
         };
-        effects: never[];
-        range: {
-            units: string;
-            override: boolean;
+        affects: {
+            choice: boolean;
         };
-        target: {
-            template: {
-                contiguous: boolean;
-                units: string;
-            };
-            affects: {
-                choice: boolean;
-            };
-            override: boolean;
-            prompt: boolean;
+        override: boolean;
+        prompt: boolean;
+    };
+    uses: {
+        spent: number;
+        recovery: never[];
+    };
+    attack: {
+        critical: {
+            threshold?: number;
         };
-        uses: {
-            spent: number;
-            recovery: never[];
+        flat: boolean;
+        type: {
+            value: string;
+            classification: string;
         };
-        attack: {
-            critical: {};
-            flat: boolean;
-            type: {};
+    };
+    damage: {
+        critical: {
+            bonus?: string;
         };
-        damage: {
-            critical: {};
-            includeBase: boolean;
-            parts: never[];
-        };
-        item: DndItem5e;
-        actor: Actor5e;
-    }[];
+        includeBase: boolean;
+        parts: never[];
+    };
+    item: DndItem5e;
+    actor: Actor5e;
+}
+
+export interface ConsumableData {
+    activities: ConsumableDataSubject[];
     uses: {
         spent: number;
         max: number;
@@ -80,7 +92,7 @@ export interface ConsumableData {
     unidentified: {
         description: string;
     };
-    container?: any;
+    container?: unknown;
     quantity: number;
     weight: {
         value: number;
@@ -96,8 +108,12 @@ export interface ConsumableData {
     attuned: boolean;
     equipped: boolean;
     crewed: boolean;
-    ammunition: {};
-    armor: {};
+    ammunition: {
+        type?: string;
+    };
+    armor: {
+        value?: string;
+    };
     damage: {
         base: {
             types: string[];
@@ -123,7 +139,7 @@ export interface ConsumableData {
         replace: boolean;
     };
     mastery: string;
-    properties: any[];
+    properties: Set<string>;
     type: {
         value: string;
         subtype: string;
@@ -145,7 +161,7 @@ export interface ConsumableData {
         rounding: string;
     };
     flags: {
-        dnd5e: Record<string, any>;
+        dnd5e: Record<string, Record<string, string>>;
     };
     name: string;
 }
