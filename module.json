@@ -38,30 +38,6 @@
     ],
     "packs": [
         {
-            "name": "weapon-reload-journal-pack",
-            "label": "Journal Pack",
-            "path": "packs/journal-pack",
-            "type": "JournalEntry",
-            "ownership": {
-                "PLAYER": "NONE",
-                "ASSISTANT": "OWNER"
-            },
-            "system": "dnd5e",
-            "flags": {}
-        },
-        {
-            "name": "weapon-reload-actor-pack",
-            "label": "Actor Pack",
-            "path": "packs/actor-pack",
-            "type": "Actor",
-            "ownership": {
-                "PLAYER": "NONE",
-                "ASSISTANT": "OWNER"
-            },
-            "system": "dnd5e",
-            "flags": {}
-        },
-        {
             "name": "weapon-reload-item-pack",
             "label": "Item Pack",
             "path": "packs/item-pack",
@@ -80,30 +56,6 @@
                     "types": ["item"]
                 }
             }
-        },
-        {
-            "name": "weapon-reload-macro-pack",
-            "label": "Macro Pack",
-            "path": "packs/macro-pack",
-            "type": "Macro",
-            "ownership": {
-                "PLAYER": "NONE",
-                "ASSISTANT": "OWNER"
-            },
-            "system": "dnd5e",
-            "flags": {}
-        },
-        {
-            "name": "weapon-reload-rollable-table-pack",
-            "label": "Rollable Table Pack",
-            "path": "packs/rollable-table-pack",
-            "type": "RollTable",
-            "ownership": {
-                "PLAYER": "NONE",
-                "ASSISTANT": "OWNER"
-            },
-            "system": "dnd5e",
-            "flags": {}
         }
     ],
     "packFolders": [
@@ -115,11 +67,7 @@
                 "PLAYER": "NONE"
             },
             "packs": [
-                "weapon-reload-journal-pack",
-                "weapon-reload-actor-pack",
-                "weapon-reload-item-pack",
-                "weapon-reload-macro-pack",
-                "weapon-reload-rollable-table-pack"
+                "weapon-reload-item-pack"
             ]
         }
     ]
