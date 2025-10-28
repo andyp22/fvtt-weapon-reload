@@ -17,7 +17,7 @@
         "test": "jest --detectOpenHandles --runInBand --json --outputFile=jest.results.json",
         "test:watch": "jest --detectOpenHandles --runInBand --watch",
         "types": "tsc --emitDeclarationOnly --project ./configs/tsconfig.types.json",
-        "validate": "npm run clean && npm run prettier:format && npm test && npm"
+        "validate": "npm run clean && npm run prettier:format && npm run lint:scan && npm test && npm run build:release"
     },
     "repository": {},
     "author": "andyp22",
