@@ -957,9 +957,7 @@ var module_default = {
 //#region src/index.ts
 Hooks.once("init", async () => {
 	console.log("Weapon Reload | Foundry VTT Module");
-	const weapon_reload = new ModuleManager(module_default.id);
-	weapon_reload.debug(true);
-	weapon_reload.init();
+	new ModuleManager(module_default.id).init();
 });
 Hooks.once("ready", async () => {
 	await rollDownSettings();
