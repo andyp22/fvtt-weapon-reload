@@ -1,6 +1,6 @@
 import FeatureManager from '../managers/FeatureManager';
 import BaseFeature from './BaseFeature';
-import { type AmmoItemOption, DndItem5e, UtilityActivity } from '../types';
+import { AmmoItemOption, DndItem5e, UtilityActivity } from '../types';
 export declare class ReloadFeature extends BaseFeature {
     private _hookId;
     private _handleChoiceDialogClose;

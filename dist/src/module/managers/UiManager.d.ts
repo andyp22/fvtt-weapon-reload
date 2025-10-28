@@ -1,5 +1,5 @@
 import ModuleManager from './ModuleManager';
-import { type DialogOptions } from '../types';
+import { DialogOptions } from '../types';
 export default class UiManager {
     private _moduleManager;
     constructor(moduleManager: ModuleManager);
