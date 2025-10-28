@@ -1,6 +1,6 @@
 # Weapon Reload Module
 
-The Weapon Reload module adds reload functionality to weapons so they can behave more like firearms. It provides system overrides, module settings, coded features, and a compendiums containing base and variant items.
+The Weapon Reload module adds reload functionality to weapons so they can behave more like firearms. It provides system overrides, module settings, coded features, and a compendium containing base and variant items.
 
 ## Supported Systems
 
@@ -21,32 +21,34 @@ The only dependencies at this time are Foundry and a supported game system.
 
 ### Feature types
 
-- `Item Feature` - A new feature type meant to be used along with items for better clasification.
+- `Item Feature` - A new feature type meant to be used along with items for better classification.
 
 ### Item properties
 
 - `Concealable`: A flag for weapons to indicate whether they are concealable.
+- `Unstable`: A flag for ammunition to indicate whether they are unstable.
 
 ## Module settings
 
 The Weapon Reload module provides the following configurable settings:
 
 - `Enable Misfires` (World): A flag to indicate whether the optional rule for using misfiring weapons is enabled.
-- `Filter Ammunition By Equipped` (User): A flag to indicate whether filtering of ammunition should include checking to see if it is also equipped.
 - `Repeating Shot Ammunition UUID` (World): The UUID of a consumable firearm bullet that will be used as ammunition for Repeating Shot.
 - `Unstable Ammunition Failure Threshold` (World): When using unstable ammunition, a roll of this or lower results in critical failure.
 - `Use Unstable Ammunition` (World): A flag to indicate whether the optional rule for using unstable ammunition is enabled.
+- `Filter Ammunition By Equipped` (User): A flag to indicate whether filtering of ammunition should include checking to see if it is also equipped.
 
 ## Features
 
 ### Reloadable Weapons
 
-Reloable Weapons are things like firearms that use ammunition but can have more than one bullet/projectile loaded into it at a time. In order for a weapon to be reloadble it must have the following configured:
+Reloable Weapons are things like firearms that use ammunition but can have more than one bullet/projectile loaded into it at a time. In order for a weapon to be reloadable it must have the following configured:
 
-- `Reload` Activity: This is a utility type activity renamed to be `Reload`. Beyond the name and activity type it can be configured however else you would like.
-- `Next Round` Activity: This is a utility type activity renamed to be `Next Round`. Beyond the name and activity type it can be configured however else you would like.
+- `Reload` Activity: This feature mimics the behavior inherent in reloading a firearm. This is a utility type activity renamed to be `Reload`. Beyond the name and activity type it can be configured however else you would like.
+- `Next Round` Activity: This feature informs the user of what the next piece of ammunition in the reloadable weapon is. This is a utility type activity renamed to be `Next Round`. Beyond the name and activity type it can be configured however else you would like.
 - `Base Weapon Type`: `Reloadable Weapon` (Martial Ranged)
 - Limited Uses: The number of limited uses allowed by the weapon represents the number of bullets that can be loaded at once.
+- `Repeating Shot` Activity: This feature is meant to mimic the Artificer's `Repeating Shot` infusion. This is an attack type activity renamed to be `Repeating Shot`. Beyond the name and activity type, the to hit and bonus damage will need to be configured properly.
 
 Reloadable weapons are empty when first acquired and must be loaded using the `Reload` feature.
 
@@ -76,27 +78,27 @@ Firearms have a limited amount of ammunition before they must be reloaded. While
 
 ### Reload feature
 
-The Reload feature is an `Item Activity` meant to be used with items that have the base type of `reloadableWeapon` as a way to elminate any need for manual tracking of ammunition on the user's part.
+The Reload feature is an `Item Activity` meant to be used with items that have the base type of `reloadableWeapon` as a way to eliminate any need for manual tracking of ammunition on the user's part.
 
 #### How it works
 
 **Note:** The player must have some ammunition in their inventory.
 
-1. The player clicks the `Reload` feature on their reloable weapon.
+1. The player clicks the `Reload` feature on their reloadable weapon.
 2. The player selects a loadout from ammunition in their inventory using a dialog and the ammunition is loaded in the selected order.
 
 From a developer point of view, the flow is:
 
-1. The player clicks the `Reload` activity on one of their character's `reloableWeapon`s.
+1. The player clicks the `Reload` activity on one of their character's `reloadableWeapon`s.
 2. The current loadout, from the `chambered` flag, is refunded to the player.
 3. The `fired` flag is reset.
 4. The player selects a loadout from ammunition in their inventory.
 5. The ammunition is loaded in the selected order and removed from inventory counts.
-6. The player is notifed what ammunition has been loaded into which firearm.
+6. The player is notified what ammunition has been loaded into which firearm.
 
 ### Artificer Infusion: Repeating Shot
 
-The Repeating Shot feature is a named `Attack Activity` meant to be used in place of the regular firearm attack. It behaves the way the [Artificer's Repeating Shot infusion](https://dnd5e.wikidot.com/artificer:infusions) would work by using a special type of ammunition and not consuming any bullets from the weapon's loadout. The ammunition type that is used for the repeating shot can be configured via the module setting, `Repeating Shot Ammunition UUID`, and by deafult is the `Repeater Round` found in the modules compendiums.
+The Repeating Shot feature is a named `Attack Activity` meant to be used in place of the regular firearm attack. It behaves the way the [Artificer's Repeating Shot infusion](https://dnd5e.wikidot.com/artificer:infusions) would work by using a special type of ammunition and not consuming any bullets from the weapon's loadout. The ammunition type that is used for the repeating shot can be configured via the module setting, `Repeating Shot Ammunition UUID`, and by default is the `Repeater Round` found in the modules compendiums.
 
 **Note:** Any ammunition that shares the same name as the configured `Repeating Shot Ammunition UUID` will be excluded from user's reload options, even if they have it equipped and in their inventory.
 
@@ -104,20 +106,20 @@ The Repeating Shot feature is a named `Attack Activity` meant to be used in plac
 
 The following compendiums are provided:
 
-- Name: Items - Contains base items, preconfigured reloadable wepaons, variant reloable weapons, and ammuntion types.
+- Name: Items - Contains base items, preconfigured reloadable weapons, variant reloadable weapons, and ammunition types.
 
 ## Planned Features
 
 - More system support (Pathfinder 2E and 1E, etc)
 - Giving an item the `Reload` weapon property prior to adding it to an actor would automatically configure the `Reload` and `Next Round` activities
 - Vehicle support
-- Ammo cartirdges
+- Ammo cartridges
 - Bulk ammo loading (choose one and have all slots filled with the same)
 
 ## License
 
 Licensed under the GPLv3 License (see [LICENSE](LICENSE)).
 
-## Disaclaimer
+## Disclaimer
 
 Art used for item icons/tokens was generated by AI.
