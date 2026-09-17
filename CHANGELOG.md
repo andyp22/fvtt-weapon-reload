@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.3
+
+- Remove references for removed assets from item pack and NextRoundFeature
+
 ## 0.2.2
 
 - Use correct icons for compendium items
