@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2
+
+- Use correct icons for compendium items
+
 ## 0.2.1
 
 - Add link to user guide in README
