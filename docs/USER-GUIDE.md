@@ -40,8 +40,6 @@ When you first enable the module:
     - `Unstable Ammunition Failure Threshold`: _2_
     - `Enable Misfires`: _enabled_
     - `Repeating Shot Ammunition UUID`: _Compendium.fvtt-weapon-reload.weapon-reload-item-pack.Item.GQzRN4amlRZX7k0V_
-- If starting a new world, it automatically sets to today's real-world date
-- The time widget appears in the UI (can be disabled in settings)
 
 ## Settings & Configuration
 
