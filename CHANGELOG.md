@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.4
+
+- Add formatted HTML Foundry README for module page
+- Remove left-over template language from user guide
+
 ## 0.2.3
 
 - Remove references for removed assets from item pack and NextRoundFeature

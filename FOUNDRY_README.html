@@ -1,0 +1,107 @@
+<h1>Weapon Reload Module</h1>
+<p>The Weapon Reload module adds reload functionality to weapons so they can behave more like firearms. It provides system overrides, module settings, coded features, and a compendium containing base and variant items.</p>
+<h2>Supported Systems</h2>
+<p>This module supports the following systems:</p>
+<ul>
+<li>Foundry VTT v13.x</li>
+<li>Dungeons and Dragons Fifth Edition v5.x</li>
+</ul>
+<h3>Dependencies</h3>
+<p>The only dependencies at this time are Foundry and a supported game system.</p>
+<h2>System overrides</h2>
+<h3>Base items</h3>
+<ul>
+<li><strong>reloadableWeapon</strong>: A new base weapon type to provide better classification.</li>
+</ul>
+<h3>Feature types</h3>
+<ul>
+<li><strong>Item Feature</strong> - A new feature type meant to be used along with items for better classification.</li>
+</ul>
+<h3>Item properties</h3>
+<ul>
+<li><strong>Concealable</strong>: A flag for weapons to indicate whether they are concealable.</li>
+<li><strong>Unstable</strong>: A flag for ammunition to indicate whether they are unstable.</li>
+</ul>
+<h2>Module settings</h2>
+<p>The Weapon Reload module provides the following configurable settings:</p>
+<ul>
+<li><strong>Enable Misfires</strong> (World): A flag to indicate whether the optional rule for using misfiring weapons is enabled.</li>
+<li><strong>Repeating Shot Ammunition UUID</strong> (World): The UUID of a consumable firearm bullet that will be used as ammunition for Repeating Shot.</li>
+<li><strong>Unstable Ammunition Failure Threshold</strong> (World): When using unstable ammunition, a roll of this or lower results in critical failure.</li>
+<li><strong>Use Unstable Ammunition</strong> (World): A flag to indicate whether the optional rule for using unstable ammunition is enabled.</li>
+<li><strong>Filter Ammunition By Equipped</strong> (User): A flag to indicate whether filtering of ammunition should include checking to see if it is also equipped.</li>
+</ul>
+<h2>Features</h2>
+<h3>Reloadable Weapons</h3>
+<p>Reloable Weapons are things like firearms that use ammunition but can have more than one bullet/projectile loaded into it at a time. In order for a weapon to be reloadable it must have the following configured:</p>
+<ul>
+<li><strong>Reload</strong> Activity: This feature mimics the behavior inherent in reloading a firearm. This is a utility type activity renamed to be <strong>Reload</strong>. Beyond the name and activity type it can be configured however else you would like.</li>
+<li><strong>Next Round</strong> Activity: This feature informs the user of what the next piece of ammunition in the reloadable weapon is. This is a utility type activity renamed to be <strong>Next Round</strong>. Beyond the name and activity type it can be configured however else you would like.</li>
+<li><strong>Base Weapon Type</strong>: <strong>Reloadable Weapon</strong> (Martial Ranged)</li>
+<li>Limited Uses: The number of limited uses allowed by the weapon represents the number of bullets that can be loaded at once.</li>
+<li>Reloadable weapons are empty when first acquired and must be loaded using the <strong>Reload</strong> feature.</li>
+</ul>
+<h3>Ammunition</h3>
+<p>Ammunition must have a <strong>Base Weapon Type</strong> of <strong>Bullet, Firearm</strong>. If a piece of ammunition can be marked <strong>Unstable</strong> using the item's <strong>Ammunition Properties</strong>.</p>
+<h3>Firearm attacks</h3>
+<p>Firearms have a limited amount of ammunition before they must be reloaded. While the default attack behavior does most of the heavy lifting for a firearm attack, some supplemental behavior is needed in order to be able to:</p>
+<ul>
+<li>Use and display information about the correct bullet, based on order and how many you have left</li>
+<li>Update uses left</li>
+<li>Handle attack refund behavior</li>
+<li>Notify the user if they fire an empty weapon or try to load too many bullets</li>
+<li>Provide a misfire roller</li>
+</ul>
+<h4>How it works</h4>
+<ol>
+<li>The player clicks on a firearm in their inventory and completes an attack roll.</li>
+<li>A bullet is pulled from the firearm's loadout stored in the item's flags and an <strong>Empty</strong> bullet is added to the end of the loadout.</li>
+<li>The fired bullet is added to the front of a <strong>fired</strong> flag and the last item is removed.</li>
+<li>The player is notified which bullet was fired along with details about the item and two buttons:
+<ul>
+<li><strong>Refund:</strong> This button allows the player to refund the last shot. It can be used until there are no more bullets to refund.</li>
+<li><strong>Misfire:</strong> This button rolls a 1d6 for the player in the event the roll a critical failure when firing a firearm.</li>
+</ul>
+</li>
+<li>If a player fired an empty weapon by mistake, they are notified and presented a button that will trigger the <strong>Reload</strong> feature.</li>
+</ol>
+<h3>Reload feature</h3>
+<p>The Reload feature is an <strong>Item Activity</strong> meant to be used with items that have the base type of <strong>reloadableWeapon</strong> as a way to eliminate any need for manual tracking of ammunition on the user's part.</p>
+<h4>How it works</h4>
+<p><strong>Note:</strong> The player must have some ammunition in their inventory.</p>
+<ol>
+<li>The player clicks the <strong>Reload</strong> feature on their reloadable weapon.</li>
+<li>The player selects a loadout from ammunition in their inventory using a dialog and the ammunition is loaded in the selected order.</li>
+</ol>
+<p>From a developer point of view, the flow is:</p>
+<ol>
+<li>The player clicks the <strong>Reload</strong> activity on one of their character's <strong>reloadableWeapon</strong>s.</li>
+<li>The current loadout, from the <strong>chambered</strong> flag, is refunded to the player.</li>
+<li>The <strong>fired</strong> flag is reset.</li>
+<li>The player selects a loadout from ammunition in their inventory.</li>
+<li>The ammunition is loaded in the selected order and removed from inventory counts.</li>
+<li>The player is notified what ammunition has been loaded into which firearm.</li>
+</ol>
+<h3>Artificer Infusion: Repeating Shot</h3>
+<p>The Repeating Shot feature is a named <strong>Attack Activity</strong> meant to be used in place of the regular firearm attack. It behaves the way the <a href="https://dnd5e.wikidot.com/artificer:infusions" target="_blank">Artificer's Repeating Shot infusion</a> would work by using a special type of ammunition and not consuming any bullets from the weapon's loadout. The ammunition type that is used for the repeating shot can be configured via the module setting, <strong>Repeating Shot Ammunition UUID</strong>, and by default is the <strong>Repeater Round</strong> found in the modules compendiums.</p>
+<p><strong>Note:</strong> Any ammunition that shares the same name as the configured <strong>Repeating Shot Ammunition UUID</strong> will be excluded from user's reload options, even if they have it equipped and in their inventory.</p>
+<h2>User Guide</h2>
+<p>A user guide can be found <a href="https://github.com/andyp22/fvtt-weapon-reload/blob/main/docs/USER-GUIDE.md" target="_blank">here</a>.</p>
+<h2>Compendiums</h2>
+<p>The following compendiums are provided:</p>
+<ul>
+<li><strong>Name:</strong> Items - Contains base items, preconfigured reloadable weapons, variant reloadable weapons, and ammunition types.</li>
+</ul>
+<h2>Possible Features</h2>
+<ul>
+<li>Foundry v14</li>
+<li>More system support (Pathfinder 2E and 1E, etc)</li>
+<li>Giving an item the <strong>Reload</strong> weapon property prior to adding it to an actor would automatically configure the <strong>Reload</strong> and <strong>Next Round</strong> activities</li>
+<li>Vehicle support</li>
+<li>Ammo cartridges</li>
+<li>Bulk ammo loading (choose one and have all slots filled with the same)</li>
+</ul>
+<h2>Development Status</h2>
+<p>This module is in alpha release.</p>
+<h2>License</h2>
+<p>Licensed under the GPLv3 License.</p>

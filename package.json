@@ -1,6 +1,6 @@
 {
     "name": "fvtt-weapon-reload",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "description": "Weapon Reload",
     "private": true,
     "scripts": {
