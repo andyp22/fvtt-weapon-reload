@@ -20,13 +20,15 @@ export class ReloadableWeaponCreationFeature extends BaseFeature {
         if (item.system.type.baseItem == 'reloadableWeapon') {
             console.log('Weapon Reload | Triggered Pre-Creation');
 
-            this.weaponId = item.id;
-            this.characterId = item.actor?.id as string;
-            this._creatingReloadableWeapon = true;
-            this._createItemHookId = Hooks.on(
-                'createItem',
-                this.onCreateItem.bind(this)
-            );
+            if (item.actor) {
+                this.weaponId = item.id;
+                this.characterId = item.actor?.id as string;
+                this._creatingReloadableWeapon = true;
+                this._createItemHookId = Hooks.on(
+                    'createItem',
+                    this.onCreateItem.bind(this)
+                );
+            }
         }
     }
 
