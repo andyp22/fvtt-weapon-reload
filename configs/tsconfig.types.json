@@ -12,7 +12,8 @@
             "@league-of-foundry-developers/foundry-vtt-types/src/index.d.mts",
             "@league-of-foundry-developers/foundry-vtt-dnd5e-types",
             "node"
-        ]
+        ],
+        "skipLibCheck": true
     },
     "include": ["../src/**/*"],
     "exclude": ["../**/*.test.ts"]
