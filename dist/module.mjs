@@ -1,8 +1,5 @@
 //#region src/module/features/BaseFeature.ts
 var BaseFeature = class {
-	_featureManager;
-	_actorId;
-	_weaponId;
 	constructor(featureManager) {
 		this._featureManager = featureManager;
 		this._actorId = "";
@@ -21,8 +18,8 @@ var BaseFeature = class {
 	get characterId() {
 		return this._actorId;
 	}
-	set characterId(id$1) {
-		this._actorId = id$1;
+	set characterId(id) {
+		this._actorId = id;
 	}
 	get weapon() {
 		return this.character.items.get(this._weaponId);
@@ -30,8 +27,8 @@ var BaseFeature = class {
 	get weaponId() {
 		return this._weaponId;
 	}
-	set weaponId(id$1) {
-		this._weaponId = id$1;
+	set weaponId(id) {
+		this._weaponId = id;
 	}
 	get loadout() {
 		return this.getReloadFlag("chambered");
@@ -64,7 +61,6 @@ var BaseFeature = class {
 		return "class BaseFeature";
 	}
 };
-
 //#endregion
 //#region src/module/features/NextRoundFeature.ts
 var NextRoundFeature = class extends BaseFeature {
@@ -101,12 +97,9 @@ var NextRoundFeature = class extends BaseFeature {
 		return "class NextRoundFeature";
 	}
 };
-
 //#endregion
 //#region src/module/features/ReloadableWeaponAttackFeature.ts
 var ReloadableWeaponAttackFeature = class extends BaseFeature {
-	_nextRound;
-	_hookId;
 	constructor(featureManager) {
 		super(featureManager);
 		this._nextRound = {
@@ -301,12 +294,9 @@ var ReloadableWeaponAttackFeature = class extends BaseFeature {
 		return "class ReloadableWeaponAttackFeature";
 	}
 };
-
 //#endregion
 //#region src/module/features/ReloadableWeaponCreationFeature.ts
 var ReloadableWeaponCreationFeature = class extends BaseFeature {
-	_creatingReloadableWeapon;
-	_createItemHookId;
 	constructor(featureManager) {
 		super(featureManager);
 		this._creatingReloadableWeapon = false;
@@ -318,10 +308,12 @@ var ReloadableWeaponCreationFeature = class extends BaseFeature {
 	async onPreCreateItem(item) {
 		if (item.system.type.baseItem == "reloadableWeapon") {
 			console.log("Weapon Reload | Triggered Pre-Creation");
-			this.weaponId = item.id;
-			this.characterId = item.actor?.id;
-			this._creatingReloadableWeapon = true;
-			this._createItemHookId = Hooks.on("createItem", this.onCreateItem.bind(this));
+			if (item.actor) {
+				this.weaponId = item.id;
+				this.characterId = item.actor?.id;
+				this._creatingReloadableWeapon = true;
+				this._createItemHookId = Hooks.on("createItem", this.onCreateItem.bind(this));
+			}
 		}
 	}
 	async onCreateItem(item) {
@@ -345,13 +337,9 @@ var ReloadableWeaponCreationFeature = class extends BaseFeature {
 		return "class ReloadableWeaponCreationFeature";
 	}
 };
-
 //#endregion
 //#region src/module/features/ReloadFeature.ts
 var ReloadFeature = class extends BaseFeature {
-	_hookId;
-	_handleChoiceDialogClose;
-	_repeaterRound;
 	constructor(featureManager) {
 		super(featureManager);
 		this._hookId = -1;
@@ -541,11 +529,9 @@ var ReloadFeature = class extends BaseFeature {
 		return "class ReloadFeature";
 	}
 };
-
 //#endregion
 //#region src/module/features/RepeatingShotFeature.ts
 var RepeatingShotFeature = class extends BaseFeature {
-	_ammo;
 	constructor(featureManager) {
 		super(featureManager);
 		this._ammo = {};
@@ -590,12 +576,9 @@ var RepeatingShotFeature = class extends BaseFeature {
 		return "class RepeatingShotFeature";
 	}
 };
-
 //#endregion
 //#region src/module/managers/FeatureManager.ts
 var FeatureManager = class {
-	_moduleManager;
-	_features;
 	constructor(moduleManager) {
 		this._moduleManager = moduleManager;
 		this._features = {};
@@ -609,8 +592,8 @@ var FeatureManager = class {
 			repeatingShot: new RepeatingShotFeature(this)
 		};
 	}
-	getFeature(id$1) {
-		if (this._features[id$1]) return this._features[id$1];
+	getFeature(id) {
+		if (this._features[id]) return this._features[id];
 		return null;
 	}
 	get moduleManager() {
@@ -620,18 +603,16 @@ var FeatureManager = class {
 		return `class FeatureManager: ${this._features.length}`;
 	}
 };
-
 //#endregion
 //#region src/module/managers/UiManager.ts
 var UiManager = class {
-	_moduleManager;
 	constructor(moduleManager) {
 		this._moduleManager = moduleManager;
 	}
 	get moduleManager() {
 		return this._moduleManager;
 	}
-	buildDialog(options, id$1) {
+	buildDialog(options, id) {
 		return new foundry.applications.api.DialogV2({
 			window: {
 				title: options.title,
@@ -640,7 +621,7 @@ var UiManager = class {
 			content: options.content,
 			buttons: options.buttons,
 			submit: options.onSubmit,
-			id: id$1
+			id
 		});
 	}
 	uiNotification(msg, type = "info") {
@@ -651,7 +632,6 @@ var UiManager = class {
 			case "warn":
 				ui.notifications.warn(msg);
 				break;
-			case "info":
 			default: ui.notifications.info(msg);
 		}
 	}
@@ -674,7 +654,6 @@ var UiManager = class {
 		return "class UiManager";
 	}
 };
-
 //#endregion
 //#region src/module/managers/TemplateManager.ts
 var TemplateManager = class TemplateManager {
@@ -697,16 +676,11 @@ var TemplateManager = class TemplateManager {
 		return "class TemplateManager";
 	}
 };
-
 //#endregion
 //#region src/module/managers/ModuleManager.ts
 var ModuleManager = class {
-	_moduleId;
-	_featureManager;
-	_uiManager;
-	_templateManager;
-	constructor(id$1) {
-		this._moduleId = id$1;
+	constructor(id) {
+		this._moduleId = id;
 		this._featureManager = new FeatureManager(this);
 		this._uiManager = new UiManager(this);
 		this._templateManager = new TemplateManager();
@@ -791,7 +765,6 @@ var ModuleManager = class {
 		return "class ModuleManager";
 	}
 };
-
 //#endregion
 //#region src/utils/rolldown.ts
 const MODULE_ID = "fvtt-weapon-reload";
@@ -826,143 +799,19 @@ function listenForSystemChanges() {
 		}
 	});
 }
-
 //#endregion
 //#region module.json
 var id = "fvtt-weapon-reload";
-var title = "Weapon Reload";
-var version = "0.0.1";
-var compatibility = {
-	"minimum": "13",
-	"verified": "13"
-};
-var authors = [{
-	"name": "Andrew Page",
-	"email": "andrew.page32@gmail.com",
-	"discord": "andyp22#1298"
-}];
-var relationships = { "systems": [{
-	"id": "dnd5e",
-	"type": "system",
-	"compatibility": {
-		"minimum": "5",
-		"verified": "5"
-	}
-}] };
-var conflicts = [];
-var esmodules = ["dist/module.mjs"];
-var scripts = [];
-var styles = [];
-var languages = [{
-	"lang": "en",
-	"name": "English",
-	"path": "languages/en.json"
-}];
-var packs = [
-	{
-		"name": "weapon-reload-journal-pack",
-		"label": "Journal Pack",
-		"path": "packs/journal-pack",
-		"type": "JournalEntry",
-		"ownership": {
-			"PLAYER": "NONE",
-			"ASSISTANT": "OWNER"
-		},
-		"system": "dnd5e",
-		"flags": {}
-	},
-	{
-		"name": "weapon-reload-actor-pack",
-		"label": "Actor Pack",
-		"path": "packs/actor-pack",
-		"type": "Actor",
-		"ownership": {
-			"PLAYER": "NONE",
-			"ASSISTANT": "OWNER"
-		},
-		"system": "dnd5e",
-		"flags": {}
-	},
-	{
-		"name": "weapon-reload-item-pack",
-		"label": "Item Pack",
-		"path": "packs/item-pack",
-		"type": "Item",
-		"ownership": {
-			"PLAYER": "OBSERVER",
-			"ASSISTANT": "OWNER"
-		},
-		"system": "dnd5e",
-		"flags": { "dnd5e": {
-			"sorting": "m",
-			"sourceBooks": { "EbW": "EWEAPON_RELOAD.Title" },
-			"types": ["item"]
-		} }
-	},
-	{
-		"name": "weapon-reload-macro-pack",
-		"label": "Macro Pack",
-		"path": "packs/macro-pack",
-		"type": "Macro",
-		"ownership": {
-			"PLAYER": "NONE",
-			"ASSISTANT": "OWNER"
-		},
-		"system": "dnd5e",
-		"flags": {}
-	},
-	{
-		"name": "weapon-reload-rollable-table-pack",
-		"label": "Rollable Table Pack",
-		"path": "packs/rollable-table-pack",
-		"type": "RollTable",
-		"ownership": {
-			"PLAYER": "NONE",
-			"ASSISTANT": "OWNER"
-		},
-		"system": "dnd5e",
-		"flags": {}
-	}
-];
-var packFolders = [{
-	"name": "Weapon Reload",
-	"sorting": "a",
-	"color": "#8b5e3c",
-	"ownership": { "PLAYER": "NONE" },
-	"packs": [
-		"weapon-reload-journal-pack",
-		"weapon-reload-actor-pack",
-		"weapon-reload-item-pack",
-		"weapon-reload-macro-pack",
-		"weapon-reload-rollable-table-pack"
-	]
-}];
-var module_default = {
-	id,
-	title,
-	version,
-	compatibility,
-	authors,
-	relationships,
-	conflicts,
-	esmodules,
-	scripts,
-	styles,
-	languages,
-	packs,
-	packFolders
-};
-
 //#endregion
 //#region src/index.ts
 Hooks.once("init", async () => {
 	console.log("Weapon Reload | Foundry VTT Module");
-	new ModuleManager(module_default.id).init();
+	new ModuleManager(id).init();
 });
 Hooks.once("ready", async () => {
 	await rollDownSettings();
 	listenForSystemChanges();
 });
-
 //#endregion
+
 //# sourceMappingURL=module.mjs.map

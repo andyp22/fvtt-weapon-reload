@@ -1,7 +1,7 @@
 {
     "id": "fvtt-weapon-reload",
     "title": "Weapon Reload",
-    "version": "0.0.1",
+    "version": "0.2.0",
     "compatibility": {
         "minimum": "13",
         "verified": "13"
@@ -66,9 +66,7 @@
             "ownership": {
                 "PLAYER": "NONE"
             },
-            "packs": [
-                "weapon-reload-item-pack"
-            ]
+            "packs": ["weapon-reload-item-pack"]
         }
     ]
 }
