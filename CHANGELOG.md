@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+
+- Add link to user guide in README
+
 ## 0.2.0
 
 ### Features
