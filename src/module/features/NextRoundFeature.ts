@@ -1,16 +1,12 @@
-import FeatureManager from '../managers/FeatureManager';
+import { type foundryApplications, UtilityActivity } from '../types';
 import BaseFeature from './BaseFeature';
 
 export class NextRoundFeature extends BaseFeature {
-    constructor(featureManager: FeatureManager) {
-        super(featureManager);
-    }
-
     init() {
         Hooks.on('dnd5e.preUseActivity', this.onUseActivity.bind(this));
     }
 
-    onUseActivity(activity: any) {
+    onUseActivity(activity: UtilityActivity) {
         if (activity.type === 'utility' && activity.name == 'Next Round') {
             console.log('Weapon Reload | Triggered Next Round');
 
@@ -28,7 +24,7 @@ export class NextRoundFeature extends BaseFeature {
 
         // Notify the user what the next round is
         const htmlTemplate = await (
-            foundry.applications as any
+            foundry.applications as foundryApplications
         ).handlebars.renderTemplate(
             'modules/fvtt-weapon-reload/templates/ammoRefundNoticeTemplate.hbs',
             {

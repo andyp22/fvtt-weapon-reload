@@ -7,7 +7,9 @@ import {
     DndItem5e,
     DndD20Roll,
     DndAttackEvent,
+    type foundryApplications,
 } from '../types';
+import { ReloadFeature } from './ReloadFeature';
 
 export class ReloadableWeaponAttackFeature extends BaseFeature {
     private _nextRound: {
@@ -237,7 +239,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
 
     async renderCard(templateData: ActivityCardChatType, character: Actor5e) {
         const htmlTemplate = await (
-            foundry.applications as any
+            foundry.applications as foundryApplications
         ).handlebars.renderTemplate(
             'modules/fvtt-weapon-reload/templates/activity-card.hbs',
             templateData
@@ -274,9 +276,9 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
     }
 
     reload(actor: Actor5e, reloadableWeapon: DndItem5e) {
-        this.featureManager
-            .getFeature('reload')
-            .onReloadCallback(actor, reloadableWeapon);
+        (
+            this.featureManager.getFeature('reload') as ReloadFeature
+        ).onReloadCallback(actor, reloadableWeapon);
     }
 
     async onClickRefund() {
@@ -334,7 +336,7 @@ export class ReloadableWeaponAttackFeature extends BaseFeature {
 
         // Notify the user that the refund was a success
         const htmlTemplate = await (
-            foundry.applications as any
+            foundry.applications as foundryApplications
         ).handlebars.renderTemplate(
             'modules/fvtt-weapon-reload/templates/ammoRefundNoticeTemplate.hbs',
             {

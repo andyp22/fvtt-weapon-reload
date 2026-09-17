@@ -1,5 +1,5 @@
 import { ReloadableWeaponCreationFeature } from './ReloadableWeaponCreationFeature';
-import { moduleMocks, MODULE_ID } from '../../../tests/mocks/moduleMocks';
+import { moduleMocks, MODULE_ID } from '../../../tests/mocks/module-mocks';
 import { jest } from '@jest/globals';
 
 let feature: ReloadableWeaponCreationFeature;

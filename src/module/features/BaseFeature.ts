@@ -1,5 +1,5 @@
 import FeatureManager from '../managers/FeatureManager';
-import { DndItem5e } from '../types';
+import { DndActor5e, DndItem5e } from '../types';
 
 export default class BaseFeature {
     private _featureManager: FeatureManager;
@@ -21,8 +21,8 @@ export default class BaseFeature {
         return this._featureManager.moduleManager;
     }
 
-    get character(): Actor5e {
-        return game?.actors?.get(this._actorId) as Actor5e;
+    get character(): DndActor5e {
+        return game?.actors?.get(this._actorId) as DndActor5e;
     }
 
     get characterId() {
@@ -74,7 +74,7 @@ export default class BaseFeature {
 
     ammunition(
         items: Collection<Item5e>,
-        equipped: boolean = false,
+        equipped = false,
         exclude: string[] = []
     ): Item5e[] {
         return items.filter((item: Item5e) => {
@@ -95,9 +95,11 @@ export default class BaseFeature {
         });
     }
 
-    init() {}
+    init(): void {
+        // Override this method
+    }
 
-    translate(key: string, opts?: { [key: string]: string }, format?: boolean) {
+    translate(key: string, opts?: Record<string, string>, format?: boolean) {
         return this.moduleManager.uiManager.getLocalizedTxt(key, opts, format);
     }
 

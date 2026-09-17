@@ -1,7 +1,12 @@
 import DialogV2 from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client-esm/applications/api/dialog.mjs';
 import FeatureManager from '../managers/FeatureManager';
 import BaseFeature from './BaseFeature';
-import { type AmmoItemOption, DndItem5e } from '../types';
+import {
+    AmmoItemOption,
+    DndItem5e,
+    type foundryApplications,
+    UtilityActivity,
+} from '../types';
 
 export class ReloadFeature extends BaseFeature {
     private _hookId: number;
@@ -24,13 +29,13 @@ export class ReloadFeature extends BaseFeature {
         const repeater_round_uuid = game.settings.get(
             this.moduleManager.id,
             'repeaterRoundUUID'
-        );
+        ) as string;
         this._repeaterRound = (await fromUuid(
             repeater_round_uuid
         )) as unknown as DndItem5e;
     }
 
-    onUseActivity(activity: any) {
+    onUseActivity(activity: UtilityActivity) {
         if (activity.type === 'utility' && activity.name == 'Reload') {
             console.log('Weapon Reload | Triggered Reload');
 
@@ -42,7 +47,7 @@ export class ReloadFeature extends BaseFeature {
         return true;
     }
 
-    weaponReload(refundAmmo: boolean = true) {
+    weaponReload(refundAmmo = true) {
         const items = this.character?.items;
         const currentLoadout = this.loadout;
         const inventoryAmmunition = this.ammunition(items, false, [
@@ -108,13 +113,11 @@ export class ReloadFeature extends BaseFeature {
         return availableAmmunition;
     }
 
-    onSubmitChooseAmmunition({
-        loadout,
-        reloadCanceled,
-    }: {
-        loadout: string[];
-        reloadCanceled: boolean;
-    }): Promise<void> {
+    onSubmitChooseAmmunition(data: unknown): Promise<void> {
+        const { loadout, reloadCanceled } = data as {
+            loadout: string[];
+            reloadCanceled: boolean;
+        };
         return this.reloadReloadableWeapon(loadout, reloadCanceled);
     }
 
@@ -123,7 +126,7 @@ export class ReloadFeature extends BaseFeature {
         currentLoadout: string[]
     ) {
         const dialogContent = await (
-            foundry.applications as any
+            foundry.applications as foundryApplications
         ).handlebars.renderTemplate(
             'modules/fvtt-weapon-reload/templates/ammoSelectionDialogTemplate.hbs',
             {
@@ -212,7 +215,9 @@ export class ReloadFeature extends BaseFeature {
         reloadCanceled: boolean,
         loadout: string[]
     ) {
-        return await (foundry.applications as any).handlebars.renderTemplate(
+        return await (
+            foundry.applications as foundryApplications
+        ).handlebars.renderTemplate(
             'modules/fvtt-weapon-reload/templates/reloadableWeaponReloadTemplate.hbs',
             {
                 item: {
@@ -236,10 +241,7 @@ export class ReloadFeature extends BaseFeature {
         );
     }
 
-    async reloadReloadableWeapon(
-        loadout: string[],
-        reloadCanceled: boolean = false
-    ) {
+    async reloadReloadableWeapon(loadout: string[], reloadCanceled = false) {
         const reloadableWeapon = this.weapon;
         const ammoCounts = this.getLoadoutCounts(loadout);
         const canceledLoadout = new Array(this.weapon.system.uses.max).fill(
@@ -296,7 +298,7 @@ export class ReloadFeature extends BaseFeature {
         return;
     }
 
-    removeLoadout(counts: { [key: string]: number }): boolean {
+    removeLoadout(counts: Record<string, number>): boolean {
         let ammunitionAvailable = true;
         const inventoryAmmunition = this.ammunition(
             this.character?.items
@@ -340,10 +342,8 @@ export class ReloadFeature extends BaseFeature {
         this.weaponReload();
     }
 
-    getLoadoutCounts(currentLoadout: string[]): {
-        [key: string]: number;
-    } {
-        const loadout: { [key: string]: number } = {};
+    getLoadoutCounts(currentLoadout: string[]): Record<string, number> {
+        const loadout: Record<string, number> = {};
         currentLoadout.forEach((ammo: string) => {
             if (!loadout[ammo]) loadout[ammo] = 0;
             loadout[ammo] = loadout[ammo] + 1;

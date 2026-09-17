@@ -73,14 +73,14 @@ export class RepeatingShotFeature extends BaseFeature {
         const repeater_round_uuid = game.settings.get(
             this.moduleManager.id,
             'repeaterRoundUUID'
-        );
+        ) as string;
         const compendiumAmmo = (await fromUuid(
             repeater_round_uuid
         )) as unknown as DndItem5e;
 
         if (!this.hasAmmo(compendiumAmmo.name)) {
-            await (this.character as any).createEmbeddedDocuments('Item', [
-                (compendiumAmmo as any).toObject(),
+            await this.character.createEmbeddedDocuments('Item', [
+                compendiumAmmo.toObject(),
             ]);
         }
 

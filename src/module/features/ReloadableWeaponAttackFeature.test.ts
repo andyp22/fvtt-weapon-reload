@@ -1,7 +1,7 @@
 import {
     makeMockReloadableWeaponAttackFeature,
     mockReloadFeature,
-} from '../../../tests/mocks/moduleMocks';
+} from '../../../tests/mocks/module-mocks';
 import { DndItem5e } from '../types';
 
 let feature: ReturnType<typeof makeMockReloadableWeaponAttackFeature>;

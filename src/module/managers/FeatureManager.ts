@@ -6,10 +6,11 @@ import {
     ReloadFeature,
     RepeatingShotFeature,
 } from '../features';
+import BaseFeature from '../features/BaseFeature';
 
 export default class FeatureManager {
     private _moduleManager: ModuleManager;
-    private _features: { [key: string]: any };
+    private _features: Record<string, BaseFeature>;
 
     constructor(moduleManager: ModuleManager) {
         this._moduleManager = moduleManager;

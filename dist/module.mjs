@@ -68,9 +68,6 @@ var BaseFeature = class {
 //#endregion
 //#region src/module/features/NextRoundFeature.ts
 var NextRoundFeature = class extends BaseFeature {
-	constructor(featureManager) {
-		super(featureManager);
-	}
 	init() {
 		Hooks.on("dnd5e.preUseActivity", this.onUseActivity.bind(this));
 	}
@@ -420,7 +417,8 @@ var ReloadFeature = class extends BaseFeature {
 		});
 		return availableAmmunition;
 	}
-	onSubmitChooseAmmunition({ loadout, reloadCanceled }) {
+	onSubmitChooseAmmunition(data) {
+		const { loadout, reloadCanceled } = data;
 		return this.reloadReloadableWeapon(loadout, reloadCanceled);
 	}
 	async chooseAmmunition(ammoOptions, currentLoadout) {
@@ -680,7 +678,6 @@ var UiManager = class {
 //#endregion
 //#region src/module/managers/TemplateManager.ts
 var TemplateManager = class TemplateManager {
-	constructor() {}
 	init() {
 		foundry.applications.handlebars.loadTemplates(TemplateManager.paths);
 	}
@@ -691,7 +688,7 @@ var TemplateManager = class TemplateManager {
 		return paths;
 	}
 	static onHotReload() {
-		for (const template in _templateCache) if (Object.prototype.hasOwnProperty.call(_templateCache, template)) delete _templateCache[template];
+		for (const template in _templateCache) if (Object.prototype.hasOwnProperty.call(_templateCache, template)) Reflect.deleteProperty(_templateCache, template);
 		foundry.applications.handlebars.loadTemplates(this.paths).then(() => {
 			for (const application in ui.windows) if (Object.prototype.hasOwnProperty.call(ui.windows, application)) ui.windows[application].render(true);
 		});

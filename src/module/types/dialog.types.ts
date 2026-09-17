@@ -1,4 +1,4 @@
-export type DialogOptions = {
+export interface DialogOptions {
     title: string;
     contentClasses?: string[];
     content: string;
@@ -8,7 +8,7 @@ export type DialogOptions = {
         callback: (
             event: PointerEvent | SubmitEvent,
             button: HTMLButtonElement
-        ) => any;
+        ) => unknown;
     }[];
-    onSubmit: (data: any) => Promise<void>;
-};
+    onSubmit: (data: unknown) => Promise<void>;
+}
