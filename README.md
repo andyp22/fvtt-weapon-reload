@@ -48,7 +48,6 @@ Reloable Weapons are things like firearms that use ammunition but can have more 
 - `Next Round` Activity: This feature informs the user of what the next piece of ammunition in the reloadable weapon is. This is a utility type activity renamed to be `Next Round`. Beyond the name and activity type it can be configured however else you would like.
 - `Base Weapon Type`: `Reloadable Weapon` (Martial Ranged)
 - Limited Uses: The number of limited uses allowed by the weapon represents the number of bullets that can be loaded at once.
-- `Repeating Shot` Activity: This feature is meant to mimic the Artificer's `Repeating Shot` infusion. This is an attack type activity renamed to be `Repeating Shot`. Beyond the name and activity type, the to hit and bonus damage will need to be configured properly.
 
 Reloadable weapons are empty when first acquired and must be loaded using the `Reload` feature.
 
@@ -108,13 +107,18 @@ The following compendiums are provided:
 
 - Name: Items - Contains base items, preconfigured reloadable weapons, variant reloadable weapons, and ammunition types.
 
-## Planned Features
+## Possible Features
 
+- Foundry v14
 - More system support (Pathfinder 2E and 1E, etc)
 - Giving an item the `Reload` weapon property prior to adding it to an actor would automatically configure the `Reload` and `Next Round` activities
 - Vehicle support
 - Ammo cartridges
 - Bulk ammo loading (choose one and have all slots filled with the same)
+
+## Development Status
+
+This module is in alpha release.
 
 ## License
 

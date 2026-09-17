@@ -1,9 +1,12 @@
 # Security Policy
+
 ## Supported Versions
 
 We provide security updates for the following versions of Weapon Reload:
-Version Supported
-0.x.x ✅ Current release
+
+### Version Supported
+
+0.2.0 ✅ Current release
 
 ## Reporting a Vulnerability
 
@@ -14,10 +17,10 @@ If you discover a security vulnerability in the Weapon Reload module, please rep
 - Do NOT open a public GitHub issue for security vulnerabilities
 - Send a private email to the maintainer with details
 - Include the following information:
-  - Description of the vulnerability
-  - Steps to reproduce the issue
-  - Potential impact assessment
-  - Suggested fix (if available)
+    - Description of the vulnerability
+    - Steps to reproduce the issue
+    - Potential impact assessment
+    - Suggested fix (if available)
 
 ### Contact Information
 
@@ -36,22 +39,13 @@ If you discover a security vulnerability in the Weapon Reload module, please rep
 ## Security Best Practices
 
 ### When using the Weapon Reload module:
+
 For GMs and Users:
 
 - Keep Updated: Always use the latest version for security fixes
 - Foundry Security: Follow Foundry VTT security best practices
 - Module Permissions: Review permissions for all installed modules
 - Data Backup: Regularly backup your calendar data and notes
-
-For Developers:
-
-- Input Validation: All user inputs are validated and sanitized
-
-### Module Integration
-
-- Bridge modules operate with limited permissions
-- Third-party integrations use public APIs only
-- No sensitive data is logged or transmitted
 
 ## Disclosure Policy
 
@@ -66,4 +60,4 @@ For Developers:
 - npm Security Best Practices
 - Node.js Security Guidelines
 
-Last updated: October 2025
+Last updated: September 2026

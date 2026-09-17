@@ -19,15 +19,15 @@ Thank you for your interest in contributing to Weapon Reload module! This docume
 Code for the Weapon Reload module is organized in the following way:
 
 - **`assets/icons/`** - Image files attached to compendium items
-- **`configs/`**      - Configuration files
-- **`docs/`**         - Project documentation
-- **`dist/`**         - Compiled module code and generated types
-- **`languages/`**    - JSON files for supported languages
-- **`packs/`**        - Compendium packs and data files
-- **`src/module`**    - Module source code
-- **`src/utils`**     - Utility code not specific to module functionality
-- **`templates`**     - Handlebars templates
-- **`tests`**         - Shared testing code
+- **`configs/`** - Configuration files
+- **`docs/`** - Project documentation
+- **`dist/`** - Compiled module code and generated types
+- **`languages/`** - JSON files for supported languages
+- **`packs/`** - Compendium packs and data files
+- **`src/module`** - Module source code
+- **`src/utils`** - Utility code not specific to module functionality
+- **`templates`** - Handlebars templates
+- **`tests`** - Shared testing code
 
 ## Getting Started
 
