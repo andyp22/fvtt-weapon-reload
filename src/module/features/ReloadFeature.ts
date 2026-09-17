@@ -29,7 +29,7 @@ export class ReloadFeature extends BaseFeature {
         const repeater_round_uuid = game.settings.get(
             this.moduleManager.id,
             'repeaterRoundUUID'
-        );
+        ) as string;
         this._repeaterRound = (await fromUuid(
             repeater_round_uuid
         )) as unknown as DndItem5e;

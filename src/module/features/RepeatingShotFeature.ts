@@ -73,7 +73,7 @@ export class RepeatingShotFeature extends BaseFeature {
         const repeater_round_uuid = game.settings.get(
             this.moduleManager.id,
             'repeaterRoundUUID'
-        );
+        ) as string;
         const compendiumAmmo = (await fromUuid(
             repeater_round_uuid
         )) as unknown as DndItem5e;
