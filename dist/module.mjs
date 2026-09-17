@@ -82,7 +82,7 @@ var NextRoundFeature = class extends BaseFeature {
 		const actor = this.character;
 		const htmlTemplate = await foundry.applications.handlebars.renderTemplate("modules/fvtt-weapon-reload/templates/ammoRefundNoticeTemplate.hbs", {
 			item: {
-				img: "modules/fvtt-weapon-reload/assets/icons/bullets_bw_icon.png",
+				img: "systems/dnd5e/icons/svg/damage/piercing.svg",
 				name: nextRound
 			},
 			description: this.translate("WEAPON_RELOAD.Features.NextRound.Description", {

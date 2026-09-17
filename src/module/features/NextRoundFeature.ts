@@ -29,7 +29,7 @@ export class NextRoundFeature extends BaseFeature {
             'modules/fvtt-weapon-reload/templates/ammoRefundNoticeTemplate.hbs',
             {
                 item: {
-                    img: 'modules/fvtt-weapon-reload/assets/icons/bullets_bw_icon.png',
+                    img: 'systems/dnd5e/icons/svg/damage/piercing.svg',
                     name: nextRound,
                 },
                 description: this.translate(

@@ -18,7 +18,6 @@ Thank you for your interest in contributing to Weapon Reload module! This docume
 
 Code for the Weapon Reload module is organized in the following way:
 
-- **`assets/icons/`** - Image files attached to compendium items
 - **`configs/`** - Configuration files
 - **`docs/`** - Project documentation
 - **`dist/`** - Compiled module code and generated types
