@@ -92,9 +92,6 @@ describe('UiManager.sendChat()', () => {
         });
         expect((global as any).ChatMessage.create).toHaveBeenCalledWith({
             speaker: { alias: 'Speaker' },
-            type: (global as any).CONST.CHAT_MESSAGE_TYPES.OTHER,
-            flavor: undefined,
-            sound: undefined,
             content,
             whisper: [],
         });

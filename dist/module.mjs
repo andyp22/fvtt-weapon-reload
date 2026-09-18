@@ -91,7 +91,7 @@ var NextRoundFeature = class extends BaseFeature {
 			}, true),
 			title: this.translate("WEAPON_RELOAD.Features.NextRound.Title")
 		});
-		this.moduleManager.uiManager.sendChat(actor, htmlTemplate, void 0, void 0, [actor.id], CONST.CHAT_MESSAGE_TYPES.WHISPER);
+		this.moduleManager.uiManager.sendChat(actor, htmlTemplate, void 0, void 0, [actor.id]);
 	}
 	toString() {
 		return "class NextRoundFeature";
@@ -635,13 +635,12 @@ var UiManager = class {
 			default: ui.notifications.info(msg);
 		}
 	}
-	sendChat(speaker, content, flavor, sound, whisper = [], type = CONST.CHAT_MESSAGE_TYPES.OTHER) {
+	sendChat(speaker, content, flavor, sound, whisper = []) {
 		const ChatData = {
 			speaker: ChatMessage.getSpeaker({ actor: speaker }),
-			type,
-			flavor,
-			sound,
 			content,
+			...flavor !== void 0 && { flavor },
+			...sound !== void 0 && { sound },
 			whisper
 		};
 		ChatMessage.create(ChatData);

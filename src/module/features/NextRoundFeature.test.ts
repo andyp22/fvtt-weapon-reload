@@ -109,8 +109,7 @@ describe('NextRoundFeature.nextRound()', () => {
             '<div>Rendered Template</div>',
             undefined,
             undefined,
-            [mockActor.id],
-            CONST.CHAT_MESSAGE_TYPES.WHISPER
+            [mockActor.id]
         );
     });
 });

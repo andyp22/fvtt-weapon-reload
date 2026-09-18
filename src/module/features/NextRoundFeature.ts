@@ -45,8 +45,7 @@ export class NextRoundFeature extends BaseFeature {
             htmlTemplate,
             undefined,
             undefined,
-            [actor.id],
-            CONST.CHAT_MESSAGE_TYPES.WHISPER
+            [actor.id]
         );
     }
 

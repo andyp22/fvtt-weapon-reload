@@ -46,15 +46,13 @@ export default class UiManager {
         content: string,
         flavor?: string,
         sound?: string,
-        whisper: string[] = [],
-        type: 0 | 1 | 2 | 3 | 4 | 5 = CONST.CHAT_MESSAGE_TYPES.OTHER
+        whisper: string[] = []
     ) {
         const ChatData = {
             speaker: ChatMessage.getSpeaker({ actor: speaker }),
-            type,
-            flavor,
-            sound,
             content,
+            ...(flavor !== undefined && { flavor }),
+            ...(sound !== undefined && { sound }),
             whisper,
         };
         ChatMessage.create(ChatData);
