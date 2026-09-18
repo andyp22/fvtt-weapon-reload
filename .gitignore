@@ -54,3 +54,7 @@ node_modules/
 
 # Jest
 jest.results.json
+
+# Generated
+/package
+fvtt-weapon-reload.zip

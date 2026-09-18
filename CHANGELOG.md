@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.5
+
+- Adds script to package module code
+- Updates module.json to point to release
+
 ## 0.2.4
 
 - Add formatted HTML Foundry README for module page
