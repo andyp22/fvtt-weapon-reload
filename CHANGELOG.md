@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0
+
+- Removes message type from ChatMessage ChatData to work with v14
+
 ## 0.2.5
 
 - Adds script to package module code
