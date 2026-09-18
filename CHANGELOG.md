@@ -2,7 +2,8 @@
 
 ## 1.0.0
 
-- Removes message type from ChatMessage ChatData to work with v14
+- Add detection of Foundry version being used to run the module
+- Update UiManager chat behaviot to exclude ChatMessage type from ChatData for v14 of Foundry
 
 ## 0.2.5
 

@@ -2,23 +2,29 @@ import FeatureManager from './FeatureManager';
 import UiManager from './UiManager';
 import TemplateManager from './TemplateManager';
 
-import { type FOUNDRY_CONFIGS } from '../types';
+import { foundryGame, type FOUNDRY_CONFIGS } from '../types';
 
 export default class ModuleManager {
     private _moduleId: string;
     private _featureManager: FeatureManager;
     private _uiManager: UiManager;
     private _templateManager: TemplateManager;
+    private _foundryVersion: number;
 
     constructor(id: string) {
         this._moduleId = id;
         this._featureManager = new FeatureManager(this);
         this._uiManager = new UiManager(this);
         this._templateManager = new TemplateManager();
+        this._foundryVersion = (game as foundryGame).release.generation;
     }
 
     get id() {
         return this._moduleId;
+    }
+
+    get version() {
+        return this._foundryVersion;
     }
 
     get featureManager() {
@@ -113,6 +119,7 @@ export default class ModuleManager {
 
     debug(hooks = false) {
         CONFIG.debug.hooks = hooks;
+        console.log('Foundry Version: ', this._foundryVersion);
         console.log('CONFIG: ', CONFIG);
         console.log('CONFIG.DND5E: ', (CONFIG as FOUNDRY_CONFIGS).DND5E);
     }

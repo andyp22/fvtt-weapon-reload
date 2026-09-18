@@ -40,12 +40,14 @@ export class NextRoundFeature extends BaseFeature {
                 title: this.translate('WEAPON_RELOAD.Features.NextRound.Title'),
             }
         );
+        const chatType = this.moduleManager.version === 13 ? 4 : 0;
         this.moduleManager.uiManager.sendChat(
             actor,
             htmlTemplate,
             undefined,
             undefined,
-            [actor.id]
+            [actor.id],
+            chatType
         );
     }
 

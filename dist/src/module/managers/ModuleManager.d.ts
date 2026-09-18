@@ -6,8 +6,10 @@ export default class ModuleManager {
     private _featureManager;
     private _uiManager;
     private _templateManager;
+    private _foundryVersion;
     constructor(id: string);
     get id(): string;
+    get version(): number;
     get featureManager(): FeatureManager;
     get uiManager(): UiManager;
     get templateManager(): TemplateManager;

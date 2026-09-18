@@ -3,6 +3,9 @@ export type foundryGame = typeof game & {
         format(key: string, opts?: Record<string, string>): string;
         localize(key: string, opts?: Record<string, string>): string;
     };
+    release: {
+        generation: number;
+    };
 };
 
 export type FOUNDRY_CONFIGS = CONFIG & {
