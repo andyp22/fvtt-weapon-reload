@@ -6,7 +6,7 @@ The Weapon Reload module adds reload functionality to weapons so they can behave
 
 This module supports the following systems:
 
-- Foundry VTT v13.x (v0.2.5) and v14.x (v1.x.x)
+- Foundry VTT v13.x and v14.x
 - Dungeons and Dragons Fifth Edition v5.x
 
 ### Dependencies
