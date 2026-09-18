@@ -4,7 +4,7 @@
     "version": "0.2.5",
     "url": "https://github.com/andyp22/fvtt-weapon-reload",
     "changelog": "https://github.com/andyp22/fvtt-weapon-reload",
-    "manifest": "https://github.com/andyp22/fvtt-weapon-reload/releases/latest/download/module.json",
+    "manifest": "https://github.com/andyp22/fvtt-weapon-reload/releases/download/0.2.5/module.json",
     "download": "https://github.com/andyp22/fvtt-weapon-reload/releases/download/0.2.5/fvtt-weapon-reload.zip",
     "compatibility": {
         "minimum": "13",
