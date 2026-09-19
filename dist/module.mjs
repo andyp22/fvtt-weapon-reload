@@ -91,7 +91,8 @@ var NextRoundFeature = class extends BaseFeature {
 			}, true),
 			title: this.translate("WEAPON_RELOAD.Features.NextRound.Title")
 		});
-		this.moduleManager.uiManager.sendChat(actor, htmlTemplate, void 0, void 0, [actor.id], CONST.CHAT_MESSAGE_TYPES.WHISPER);
+		const chatType = this.moduleManager.version === 13 ? 4 : 0;
+		this.moduleManager.uiManager.sendChat(actor, htmlTemplate, void 0, void 0, [actor.id], chatType);
 	}
 	toString() {
 		return "class NextRoundFeature";
@@ -635,14 +636,14 @@ var UiManager = class {
 			default: ui.notifications.info(msg);
 		}
 	}
-	sendChat(speaker, content, flavor, sound, whisper = [], type = CONST.CHAT_MESSAGE_TYPES.OTHER) {
+	sendChat(speaker, content, flavor, sound, whisper = [], type = 0) {
 		const ChatData = {
 			speaker: ChatMessage.getSpeaker({ actor: speaker }),
-			type,
-			flavor,
-			sound,
 			content,
-			whisper
+			...flavor !== void 0 && { flavor },
+			...sound !== void 0 && { sound },
+			whisper,
+			...this.moduleManager.version === 13 && { type }
 		};
 		ChatMessage.create(ChatData);
 	}
@@ -684,9 +685,13 @@ var ModuleManager = class {
 		this._featureManager = new FeatureManager(this);
 		this._uiManager = new UiManager(this);
 		this._templateManager = new TemplateManager();
+		this._foundryVersion = game.release.generation;
 	}
 	get id() {
 		return this._moduleId;
+	}
+	get version() {
+		return this._foundryVersion;
 	}
 	get featureManager() {
 		return this._featureManager;
@@ -758,6 +763,7 @@ var ModuleManager = class {
 	}
 	debug(hooks = false) {
 		CONFIG.debug.hooks = hooks;
+		console.log("Foundry Version: ", this._foundryVersion);
 		console.log("CONFIG: ", CONFIG);
 		console.log("CONFIG.DND5E: ", CONFIG.DND5E);
 	}
@@ -806,7 +812,9 @@ var id = "fvtt-weapon-reload";
 //#region src/index.ts
 Hooks.once("init", async () => {
 	console.log("Weapon Reload | Foundry VTT Module");
-	new ModuleManager(id).init();
+	const weapon_reload = new ModuleManager(id);
+	weapon_reload.debug(false);
+	weapon_reload.init();
 });
 Hooks.once("ready", async () => {
 	await rollDownSettings();

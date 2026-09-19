@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0
+
+- Add detection of Foundry version being used to run the module
+- Update UiManager chat behaviot to exclude ChatMessage type from ChatData for v14 of Foundry
+
 ## 0.2.5
 
 - Adds script to package module code

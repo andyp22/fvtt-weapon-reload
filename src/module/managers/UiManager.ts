@@ -47,15 +47,15 @@ export default class UiManager {
         flavor?: string,
         sound?: string,
         whisper: string[] = [],
-        type: 0 | 1 | 2 | 3 | 4 | 5 = CONST.CHAT_MESSAGE_TYPES.OTHER
+        type: 0 | 1 | 2 | 3 | 4 | 5 = 0
     ) {
         const ChatData = {
             speaker: ChatMessage.getSpeaker({ actor: speaker }),
-            type,
-            flavor,
-            sound,
             content,
+            ...(flavor !== undefined && { flavor }),
+            ...(sound !== undefined && { sound }),
             whisper,
+            ...(this.moduleManager.version === 13 && { type }),
         };
         ChatMessage.create(ChatData);
     }
